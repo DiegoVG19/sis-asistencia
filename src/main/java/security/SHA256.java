@@ -4,7 +4,6 @@
  */
 package security;
 
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -26,5 +25,14 @@ public class SHA256 {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+        String input = "vega";
+
+        String sha256Hash = getSha256Hash(input);
+
+        System.out.println("El hash SHA-256 de la cadena es:");
+        System.out.println(sha256Hash);
     }
 }
