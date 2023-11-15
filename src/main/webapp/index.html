@@ -99,29 +99,30 @@
         <script src="js/sb-admin-2.min.js"></script>
         <script>
             $(document).ready(function () {
-            $("#btnIngresar").click(function () {
-            let usuario = $("#txtUsuario").val();
+                $("#btnIngresar").click(function () {
+                    let usuario = $("#txtUsuario").val();
                     let clave = $("#txtPass").val();
-                    le(document).ready(function () {
-            $("#btnIngresar").click(function () {
-            let usuario = $("#txtUsuario").val();
-                    let t parametro = {usuario: usuario, clave: clave};
+                    let parametro = {usuario: usuario, clave: clave};
                     document.cookie = "clave=" + clave;
                     $.getJSON("validar", parametro, function (data) {
-                    if (data.resultado === "ok") {
-                    let token = data.token;
+                        if (data.resultado === "ok") {
+                            let token = data.token;
                             const tokenCodificado = encodeURIComponent(token);
                             let dato = data.dato;
+
                             // Guardar los valores en cookies
                             document.cookie = "usuario=" + usuario;
                             document.cookie = "token=" + token;
                             document.cookie = "dato=" + dato;
+
+
+
                             $(location).attr('href', "tables.html?usuario=" + usuario + "&token=" + token + "&dato=" + dato + "&clave=" + clave);
-                    } else {
-                    alert("Error");
-                    }
+                        } else {
+                            alert("Error");
+                        }
                     });
-            });
+                });
             });
         </script>
 
