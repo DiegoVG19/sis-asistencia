@@ -1,0 +1,41 @@
+-- Mediante la gestión de dependencias podemos agregar manualmente el codigo:
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.11.2</version>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.11.2</version>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.11.2</version>
+    <scope>runtime</scope>
+</dependency>
+
+-- Para generar un token JWT utilizando la librería, creamos lo sgte:
+
+import java.io.jsonwebtoken.Jwts;
+import java.io.jsonwebtoken.SignatureAlgorithm;
+
+public class JwtGenerador {
+    public static String generarToken() {
+        String token = Jwts.builder()
+                .setSubject("usuario123") // Puedes personalizar esto según tus necesidades
+                .signWith(SignatureAlgorithm.HS256, "secreto") // Puedes cambiar el algoritmo y la clave secreta
+                .compact();
+        return token;
+    }
+
+    public static void main(String[] args) {
+        String token = generarToken();
+        System.out.println("Token JWT: " + token);
+    }
+}
+
+
