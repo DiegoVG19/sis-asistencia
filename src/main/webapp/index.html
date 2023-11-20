@@ -8,9 +8,7 @@
         <link rel="stylesheet" href="css/asistencia.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400&family=Nunito:wght@300;400&display=swap"
-            rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
     </head>
 
     <body>
@@ -19,11 +17,11 @@
         <div class="container">
             <a class="acceso" href="login.html">Ingresar al sistema</a>
             <p class="dni">Ingrese su DNI</p>
-            <form action="">
-                <input type="text" placeholder="DNI del empleado" name="txtdni">
+            <form action="RegistroAsistenciaServlet" method="post" onsubmit="return validarEntrada()">
+                <input type="text" placeholder="DNI del empleado" name="txtdni" id="txtdni">
                 <div class="botones">
-                    <a class="entrada" href="">ENTRADA</a>
-                    <a class="salida" href="">SALIDA</a>
+                    <button type="submit" name="btnentrada" value="ok">ENTRADA</button>
+                    <button type="submit" name="btnsalida" value="ok">SALIDA</button>
                 </div>
             </form>
         </div>
@@ -34,6 +32,36 @@
                 let fechaHora = fecha.toLocaleString();
                 document.getElementById("fecha").textContent = fechaHora;
             }, 1000);
+
+            function validarEntrada() {
+                var dniValue = document.getElementById("txtdni").value;
+
+                if (dniValue === "") {
+                    alert("Por favor, ingrese el DNI del empleado.");
+                    return false; // Evita que el formulario se envíe si el DNI está vacío
+                }
+
+                // Envía el DNI al servlet y muestra mensajes según el resultado
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            // Mensaje de éxito
+                            alert("Entrada registrada correctamente");
+                        } else {
+                            // Mensaje de error
+                            alert("Error: No se pudo registrar la entrada");
+                        }
+                    }
+                };
+
+                // Prepara y envía la solicitud
+                xhr.open("POST", "RegistroAsistenciaServlet", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send("txtdni=" + encodeURIComponent(dniValue));
+
+                return false; // Evita que el formulario se envíe automáticamente
+            }
         </script>
     </body>
 

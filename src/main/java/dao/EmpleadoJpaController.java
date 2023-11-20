@@ -19,6 +19,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -238,6 +239,22 @@ public class EmpleadoJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             return em.find(Empleado.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Empleado findEmpleadoByDni(String dni) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Empleado> query = em.createNamedQuery("Empleado.findByDni", Empleado.class);
+            query.setParameter("dni", dni);
+            List<Empleado> result = query.getResultList();
+            if (!result.isEmpty()) {
+                return result.get(0);
+            } else {
+                return null;  // No se encontró ningún empleado con ese DNI
+            }
         } finally {
             em.close();
         }

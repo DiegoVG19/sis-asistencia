@@ -12,10 +12,14 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import dto.Empleado;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 
 /**
  *
@@ -156,6 +160,42 @@ public class AsistenciaJpaController implements Serializable {
             em.close();
         }
     }
+    
+   public List<Asistencia> findAsistenciaByEmpleadoYFecha(int idEmpleado, Date fecha) {
+    EntityManager em = getEntityManager();
+    try {
+        Calendar startOfDay = Calendar.getInstance();
+        startOfDay.setTime(fecha);
+        startOfDay.set(Calendar.HOUR_OF_DAY, 0);
+        startOfDay.set(Calendar.MINUTE, 0);
+        startOfDay.set(Calendar.SECOND, 0);
+
+        Calendar endOfDay = Calendar.getInstance();
+        endOfDay.setTime(fecha);
+        endOfDay.set(Calendar.HOUR_OF_DAY, 23);
+        endOfDay.set(Calendar.MINUTE, 59);
+        endOfDay.set(Calendar.SECOND, 59);
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Asistencia> cq = cb.createQuery(Asistencia.class);
+        Root<Asistencia> asistencia = cq.from(Asistencia.class);
+
+        cq.select(asistencia)
+            .where(
+                cb.equal(asistencia.get("idEmpleado"), idEmpleado),
+                cb.between(asistencia.get("entrada").as(Date.class), 
+                           startOfDay.getTime(), 
+                           endOfDay.getTime())
+            );
+
+        TypedQuery<Asistencia> query = em.createQuery(cq);
+        return query.getResultList();
+    } finally {
+        em.close();
+    }
+}
+
+
 
     public int getAsistenciaCount() {
         EntityManager em = getEntityManager();
@@ -165,6 +205,32 @@ public class AsistenciaJpaController implements Serializable {
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Asistencia findAsistenciaByEmpleado(int idEmpleado) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Asistencia> cq = cb.createQuery(Asistencia.class);
+            Root<Asistencia> asistencia = cq.from(Asistencia.class);
+
+            cq.select(asistencia)
+                .where(cb.equal(asistencia.get("idEmpleado"), idEmpleado))
+                .orderBy(cb.desc(asistencia.get("entrada"))); // Si hay múltiples entradas, obtener la más reciente
+
+            TypedQuery<Asistencia> query = em.createQuery(cq);
+            query.setMaxResults(1); // Obtener solo un resultado (la entrada más reciente)
+            
+            List<Asistencia> result = query.getResultList();
+            
+            if (!result.isEmpty()) {
+                return result.get(0);
+            } else {
+                return null; // No se encontraron entradas para el empleado
+            }
         } finally {
             em.close();
         }
