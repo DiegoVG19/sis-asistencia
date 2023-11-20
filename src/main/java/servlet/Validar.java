@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import security.AES;
+import security.JwtGenerator;
 import security.SHA256;
 
 /**
@@ -39,8 +39,8 @@ public class Validar extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             String resultado = "";
-            String usuario = request.getParameter("usuario");
-            String clave = request.getParameter("clave");
+            String usuario = request.getParameter("logi");
+            String clave = request.getParameter("pass");
             String passHash = SHA256.getSha256Hash(clave);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -51,8 +51,7 @@ public class Validar extends HttpServlet {
             Usuario u = usuDAO.logueo(usuario, passHash);
 
             if (u != null) {
-                final String secretKey = "ssshhhhhhhhhhh!!!!";
-                String token = AES.encrypt(dato, secretKey);
+                String token = JwtGenerator.generateToken(dato);
                 resultado = "{\"resultado\":\"ok\",\"usuario\":\"" + usuario + "\",\"token\":\"" + token + "\",\"dato\":\"" + dato + "\"}";
             } else {
                 resultado = "{\"resultado\":\"error\"}";

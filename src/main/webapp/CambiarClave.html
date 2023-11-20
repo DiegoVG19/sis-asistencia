@@ -1,85 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
     <head>
-
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-
-        <title>SB Admin 2 - Login</title>
-
-        <!-- Custom fonts for this template-->
-        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
-
-        <!-- Custom styles for this template-->
-        <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Inicio de Sesión - SB Admin</title>
+        <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.3.0/css/all.css" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+        <style>
+            /* Estilos personalizados */
+            label.form-label {
+                font-weight: bold;
+            }
+        </style>
     </head>
+    <body class="bg-info">
+        <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="text-center font-weight-light my-4">CAMBIO DE CONTRASEÑA</h3>
+                                    </div>
+                                    <div class="card-body">
 
-    <body class="bg-gradient-primary">
-
-        <div class="container">
-
-            <!-- Outer Row -->
-            <div class="row justify-content-center">
-
-                <div class="col-xl-10 col-lg-12 col-md-9">
-
-                    <div class="card o-hidden border-0 shadow-lg my-5">
-                        <div class="card-body p-0">
-                            <!-- Nested Row within Card Body -->
-                            <div class="row">
-                                <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                                <div class="col-lg-6">
-                                    <div class="p-5">
-                                        <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">Actualiza Contraseña</h1>
+                                        <div class="mb-3">
+                                            <label for="txtActual" class="form-label">Contraseña Actual</label>
+                                            <input class="form-control" id="txtActual" placeholder="Contraseña Actual" type="password" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="txtNueva" class="form-label">Contraseña Nueva</label>
+                                            <input class="form-control" id="txtNueva" placeholder="Contraseña Nueva" type="password" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="txtConfirmar" class="form-label">Confirmar Contraseña</label>
+                                            <input class="form-control" id="txtConfirmar" placeholder="Contraseña Nueva" type="password" required />
+                                        </div>
+                                        <div class="d-grid gap-2">
+                                            <button id="btnActualizar" class="btn btn-primary" type="button">Confirmar</button>
+                                            <button id="btnCancelar" class="btn btn-secondary" type="button">Cancelar</button>
                                         </div>
 
-                                        <input type="password" class="form-control form-control-user" id="txtActual" placeholder="Contraseña Actual">
-                                        <input type="password" class="form-control form-control-user" id="txtNueva" placeholder="Nueva Contraseña">
-                                        <input type="password" class="form-control form-control-user" id="txtConfirmar" placeholder="Confirmar Contraseña">
-                                        <button id="btnActualizar" class="btn btn-primary btn-user btn-block">ACTUALIZAR CONTRASEÑA</button>
-
-                                        <hr>
 
 
-                                        <hr>
-                                        <div class="text-center">
-                                            <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                        </div>
-                                        <div class="text-center">
-                                            <a class="small" href="register.html">Create an Account!</a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                </div>
-
+                </main>
             </div>
-
+            <div id="layoutAuthentication_footer">
+                <footer class="py-3 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
         </div>
+        <div id="resultado"></div>
 
-        <!-- Bootstrap core JavaScript-->
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <!--Llamando al Script-->
+        <script src="js/cambioContra.js"></script>
+        <script src="jquery/jquery.min.js"></script>
+        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="js/fontawesome.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/main2.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/bootstrap.bundle.js"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script>
+            function getCookie(nombre) {
+                let nombreEQ = nombre + "=";
+                let cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i];
+                    while (cookie.charAt(0) === ' ') {
+                        cookie = cookie.substring(1, cookie.length);
+                    }
+                    if (cookie.indexOf(nombreEQ) === 0) {
+                        return cookie.substring(nombreEQ.length, cookie.length);
+                    }
+                }
+                return null;
+            }
 
-        <!-- Custom scripts for all pages-->
-        <script src="js/sb-admin-2.min.js"></script>
-        <script src="js/CambiarClave.js"></script>
+            // Obtener los valores de las cookies
+            const usuario = getCookie("usuario");
+            const token = getCookie("token");
+            const dato = getCookie("dato");
+            const clave = getCookie("pass");
+
+            // Asignar los valores a los campos correspondientes
+            $("#txtUsuario").val(usuario);
+            $("#txtToken").val(token);
+            $("#txtDato").val(dato);
+            $("#txtClave").val(clave);
+
+            // ...
+
+            $("#btnActualizar").click(function () {
+                const actual = $("#txtActual").val();
+                const nueva = $("#txtNueva").val();
+                const confirmar = $("#txtConfirmar").val();
+                // Validar campos vacíos
+                if (!actual || !nueva || !confirmar) {
+                    $("#resultado").html('Por favor, complete todos los campos.');
+                    return;
+                }
+                // Validar si la contraseña actual coincide con "clave"
+                if (clave !== actual) {
+                    $("#resultado").html('Contraseña actual no coincide');
+                    return; // Detener la ejecución si no coincide
+                }
+
+                // Validar si las contraseñas nuevas coinciden
+                if (nueva !== confirmar) {
+                    $("#resultado").html('Las contraseñas nuevas no coinciden');
+                    return; // Detener la ejecución si no coinciden
+                }
+
+                // Si las validaciones pasan, procede a enviar los valores al servlet
+                const parametros = {
+                    usuario: usuario,
+                    nueva: nueva,
+                    clave: clave,
+                    actual: actual,
+                    confirmar: confirmar,
+                    token: token,
+                    dato: dato
+                };
+                console.log(parametros);
+                $.ajax({
+                    url: 'actualizar-contrasena', // Ruta correcta de tu servlet
+                    method: 'POST',
+                    data: parametros,
+                    success: function (data) {
+                        console.log('Éxito');
+                        console.log(data);
+                        //console.log('Valor de data.resultado:', data.resultado);
+                        if ((String(data.resultado)).trim() === 'ok') {
+                            alert('Contraseña actualizada exitosamente');
+                        } else {
+                            console.log('Error en la respuesta:', data); // Agrega esta línea para ver más detalles del error en la consola
+                            $("#resultado").html('Error al actualizar la contraseña.');
+                          $(location).attr('href', 'login.html');
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error al enviar la solicitud al servidor:', error);
+                        $("#resultado").html('Error al enviar la solicitud al servidor');
+                    }
+                });
+            });
+
+        </script>
 
     </body>
-
 </html>

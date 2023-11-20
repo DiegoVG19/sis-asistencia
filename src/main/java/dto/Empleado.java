@@ -18,27 +18,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author USER
+ * @author redcr
  */
 @Entity
 @Table(name = "empleado")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Empleado.findAll", query = "SELECT e FROM Empleado e"),
-     @NamedQuery(name = "Empleado.listar", query = "SELECT e.nombre, c.nombre, dp.nombPer, dp.appPer, dp.apmaPer, dp.fechaNac, "
-            + "dp.dNIPers, dp.direccion, dp.celular "
-            + "FROM Empleado emp "
-            + "JOIN emp.idcargo c "
-            + "JOIN emp.idDatos dp "
-            + "JOIN emp.idempresa e"),
-    @NamedQuery(name = "Empleado.findByIdEmpleado", query = "SELECT e FROM Empleado e WHERE e.idEmpleado = :idEmpleado")})
+    @NamedQuery(name = "Empleado.findByIdEmpleado", query = "SELECT e FROM Empleado e WHERE e.idEmpleado = :idEmpleado"),
+    @NamedQuery(name = "Empleado.findByNombre", query = "SELECT e FROM Empleado e WHERE e.nombre = :nombre"),
+    @NamedQuery(name = "Empleado.findByApellido", query = "SELECT e FROM Empleado e WHERE e.apellido = :apellido"),
+    @NamedQuery(name = "Empleado.findByDni", query = "SELECT e FROM Empleado e WHERE e.dni = :dni")})
 public class Empleado implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,19 +45,22 @@ public class Empleado implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_empleado")
     private Integer idEmpleado;
+    @Size(max = 100)
+    @Column(name = "nombre")
+    private String nombre;
+    @Size(max = 255)
+    @Column(name = "apellido")
+    private String apellido;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "dni")
+    private String dni;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<Asistencia> asistenciaList;
-    @JoinColumn(name = "IdDatos", referencedColumnName = "IdDatos")
+    @JoinColumn(name = "cargo", referencedColumnName = "id_cargo")
     @ManyToOne(optional = false)
-    private Datospersonal idDatos;
-    @JoinColumn(name = "idcargo", referencedColumnName = "idcargo")
-    @ManyToOne(optional = false)
-    private Cargo idcargo;
-    @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
-    @ManyToOne(optional = false)
-    private Empresa idempresa;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
-    private Usuario usuario;
+    private Cargo cargo;
 
     public Empleado() {
     }
@@ -68,12 +69,41 @@ public class Empleado implements Serializable {
         this.idEmpleado = idEmpleado;
     }
 
+    public Empleado(Integer idEmpleado, String dni) {
+        this.idEmpleado = idEmpleado;
+        this.dni = dni;
+    }
+
     public Integer getIdEmpleado() {
         return idEmpleado;
     }
 
     public void setIdEmpleado(Integer idEmpleado) {
         this.idEmpleado = idEmpleado;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     @XmlTransient
@@ -85,36 +115,12 @@ public class Empleado implements Serializable {
         this.asistenciaList = asistenciaList;
     }
 
-    public Datospersonal getIdDatos() {
-        return idDatos;
+    public Cargo getCargo() {
+        return cargo;
     }
 
-    public void setIdDatos(Datospersonal idDatos) {
-        this.idDatos = idDatos;
-    }
-
-    public Cargo getIdcargo() {
-        return idcargo;
-    }
-
-    public void setIdcargo(Cargo idcargo) {
-        this.idcargo = idcargo;
-    }
-
-    public Empresa getIdempresa() {
-        return idempresa;
-    }
-
-    public void setIdempresa(Empresa idempresa) {
-        this.idempresa = idempresa;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setCargo(Cargo cargo) {
+        this.cargo = cargo;
     }
 
     @Override

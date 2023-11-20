@@ -19,12 +19,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author USER
+ * @author redcr
  */
 @Entity
 @Table(name = "asistencia")
@@ -32,7 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Asistencia.findAll", query = "SELECT a FROM Asistencia a"),
     @NamedQuery(name = "Asistencia.findByIdAsistencia", query = "SELECT a FROM Asistencia a WHERE a.idAsistencia = :idAsistencia"),
-    @NamedQuery(name = "Asistencia.findByIngreso", query = "SELECT a FROM Asistencia a WHERE a.ingreso = :ingreso")})
+    @NamedQuery(name = "Asistencia.findByEntrada", query = "SELECT a FROM Asistencia a WHERE a.entrada = :entrada"),
+    @NamedQuery(name = "Asistencia.findBySalida", query = "SELECT a FROM Asistencia a WHERE a.salida = :salida")})
 public class Asistencia implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,31 +41,21 @@ public class Asistencia implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_asistencia")
     private Integer idAsistencia;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ingreso")
+    @Column(name = "entrada")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date ingreso;
-    @JoinColumn(name = "IdTurno", referencedColumnName = "IdTurno")
-    @ManyToOne(optional = false)
-    private Turno idTurno;
+    private Date entrada;
+    @Column(name = "salida")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date salida;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
     @ManyToOne(optional = false)
     private Empleado idEmpleado;
-    @JoinColumn(name = "IdEstado", referencedColumnName = "IdEstado")
-    @ManyToOne(optional = false)
-    private Estado idEstado;
 
     public Asistencia() {
     }
 
     public Asistencia(Integer idAsistencia) {
         this.idAsistencia = idAsistencia;
-    }
-
-    public Asistencia(Integer idAsistencia, Date ingreso) {
-        this.idAsistencia = idAsistencia;
-        this.ingreso = ingreso;
     }
 
     public Integer getIdAsistencia() {
@@ -76,20 +66,20 @@ public class Asistencia implements Serializable {
         this.idAsistencia = idAsistencia;
     }
 
-    public Date getIngreso() {
-        return ingreso;
+    public Date getEntrada() {
+        return entrada;
     }
 
-    public void setIngreso(Date ingreso) {
-        this.ingreso = ingreso;
+    public void setEntrada(Date entrada) {
+        this.entrada = entrada;
     }
 
-    public Turno getIdTurno() {
-        return idTurno;
+    public Date getSalida() {
+        return salida;
     }
 
-    public void setIdTurno(Turno idTurno) {
-        this.idTurno = idTurno;
+    public void setSalida(Date salida) {
+        this.salida = salida;
     }
 
     public Empleado getIdEmpleado() {
@@ -98,14 +88,6 @@ public class Asistencia implements Serializable {
 
     public void setIdEmpleado(Empleado idEmpleado) {
         this.idEmpleado = idEmpleado;
-    }
-
-    public Estado getIdEstado() {
-        return idEstado;
-    }
-
-    public void setIdEstado(Estado idEstado) {
-        this.idEstado = idEstado;
     }
 
     @Override

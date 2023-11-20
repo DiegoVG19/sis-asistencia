@@ -23,15 +23,14 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author USER
+ * @author redcr
  */
 @Entity
 @Table(name = "cargo")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Cargo.findAll", query = "SELECT c FROM Cargo c"),
-    @NamedQuery(name = "Cargo.findByIdcargo", query = "SELECT c FROM Cargo c WHERE c.idcargo = :idcargo"),
-    @NamedQuery(name = "Cargo.listar", query = "SELECT c.idcargo,c.nombre FROM Cargo c"),
+    @NamedQuery(name = "Cargo.findByIdCargo", query = "SELECT c FROM Cargo c WHERE c.idCargo = :idCargo"),
     @NamedQuery(name = "Cargo.findByNombre", query = "SELECT c FROM Cargo c WHERE c.nombre = :nombre")})
 public class Cargo implements Serializable {
 
@@ -39,27 +38,27 @@ public class Cargo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idcargo")
-    private Integer idcargo;
+    @Column(name = "id_cargo")
+    private Integer idCargo;
     @Size(max = 100)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcargo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cargo")
     private List<Empleado> empleadoList;
 
     public Cargo() {
     }
 
-    public Cargo(Integer idcargo) {
-        this.idcargo = idcargo;
+    public Cargo(Integer idCargo) {
+        this.idCargo = idCargo;
     }
 
-    public Integer getIdcargo() {
-        return idcargo;
+    public Integer getIdCargo() {
+        return idCargo;
     }
 
-    public void setIdcargo(Integer idcargo) {
-        this.idcargo = idcargo;
+    public void setIdCargo(Integer idCargo) {
+        this.idCargo = idCargo;
     }
 
     public String getNombre() {
@@ -82,7 +81,7 @@ public class Cargo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idcargo != null ? idcargo.hashCode() : 0);
+        hash += (idCargo != null ? idCargo.hashCode() : 0);
         return hash;
     }
 
@@ -93,7 +92,7 @@ public class Cargo implements Serializable {
             return false;
         }
         Cargo other = (Cargo) object;
-        if ((this.idcargo == null && other.idcargo != null) || (this.idcargo != null && !this.idcargo.equals(other.idcargo))) {
+        if ((this.idCargo == null && other.idCargo != null) || (this.idCargo != null && !this.idCargo.equals(other.idCargo))) {
             return false;
         }
         return true;
@@ -101,7 +100,7 @@ public class Cargo implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.Cargo[ idcargo=" + idcargo + " ]";
+        return "dto.Cargo[ idCargo=" + idCargo + " ]";
     }
-
+    
 }

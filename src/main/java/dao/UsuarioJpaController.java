@@ -34,6 +34,28 @@ public class UsuarioJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public String obtenerNombreApellidoPorUsername(String username) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("Usuario.findByLogiUsua");
+            q.setParameter("logiUsua", username);
+
+            Usuario usuario = (Usuario) q.getSingleResult();
+
+            if (usuario != null) {
+                String nombre = usuario.getNombre();
+                String apellido = usuario.getApellido();
+                return nombre + " " + apellido;
+            } else {
+                return null; // Puedes manejar este caso de acuerdo a tus necesidades
+            }
+        } catch (Exception e) {
+            return null; // Puedes manejar las excepciones según tus necesidades
+        } finally {
+            em.close();
+        }
+    }
+
     public void create(Usuario usuario) {
         EntityManager em = null;
         try {
@@ -71,23 +93,6 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public Usuario findUsuarioByUsername(String username) {
-        EntityManager em = getEntityManager();
-        try {
-            Query q = em.createNamedQuery("Usuario.findByLogiUsua");
-            q.setParameter("logiUsua", username);
-            List<Usuario> usuarios = q.getResultList();
-            if (!usuarios.isEmpty()) {
-                // Suponemos que solo habrá un usuario con ese nombre de usuario
-                return usuarios.get(0);
-            } else {
-                return null;
-            }
-        } finally {
-            em.close();
-        }
-    }
-
     public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -117,6 +122,19 @@ public class UsuarioJpaController implements Serializable {
         return findUsuarioEntities(false, maxResults, firstResult);
     }
 
+    public Usuario logueo(String usuario, String clave) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("Usuario.validar");
+            q.setParameter("logiUsua", usuario);
+            q.setParameter("passUsua", clave);
+            Usuario pers = (Usuario) q.getSingleResult();
+            return pers;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private List<Usuario> findUsuarioEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
@@ -133,6 +151,23 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
+    public Usuario findUsuarioByUsername(String username) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("Usuario.findByLogiUsua");
+            q.setParameter("logiUsua", username);
+            List<Usuario> usuarios = q.getResultList();
+            if (!usuarios.isEmpty()) {
+                // Suponemos que solo habrá un usuario con ese nombre de usuario
+                return usuarios.get(0);
+            } else {
+                return null;
+            }
+        } finally {
+            em.close();
+        }
+    }
+
     public Usuario findUsuario(Integer id) {
         EntityManager em = getEntityManager();
         try {
@@ -141,20 +176,6 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
-
-   public Usuario logueo(String usuario, String clave) {
-        EntityManager em = getEntityManager();
-        try {
-            Query q = em.createNamedQuery("Usuario.validar");
-            q.setParameter("logiUsua", usuario);
-            q.setParameter("passUsua", clave);
-            Usuario pers = (Usuario) q.getSingleResult();
-            return pers;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
 
     public int getUsuarioCount() {
         EntityManager em = getEntityManager();

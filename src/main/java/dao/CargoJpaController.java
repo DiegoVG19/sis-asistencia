@@ -14,7 +14,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import dto.Empleado;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,18 +21,19 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author USER
+ * @author redcr
  */
 public class CargoJpaController implements Serializable {
 
     public CargoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("com.mycompany_Asistencia03_war_1.0-SNAPSHOTPU");
 
     public CargoJpaController() {
     }
-
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("com.mycompany_Asistencia03_war_1.0-SNAPSHOTPU");
+    
+    
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -55,12 +55,12 @@ public class CargoJpaController implements Serializable {
             cargo.setEmpleadoList(attachedEmpleadoList);
             em.persist(cargo);
             for (Empleado empleadoListEmpleado : cargo.getEmpleadoList()) {
-                Cargo oldIdcargoOfEmpleadoListEmpleado = empleadoListEmpleado.getIdcargo();
-                empleadoListEmpleado.setIdcargo(cargo);
+                Cargo oldCargoOfEmpleadoListEmpleado = empleadoListEmpleado.getCargo();
+                empleadoListEmpleado.setCargo(cargo);
                 empleadoListEmpleado = em.merge(empleadoListEmpleado);
-                if (oldIdcargoOfEmpleadoListEmpleado != null) {
-                    oldIdcargoOfEmpleadoListEmpleado.getEmpleadoList().remove(empleadoListEmpleado);
-                    oldIdcargoOfEmpleadoListEmpleado = em.merge(oldIdcargoOfEmpleadoListEmpleado);
+                if (oldCargoOfEmpleadoListEmpleado != null) {
+                    oldCargoOfEmpleadoListEmpleado.getEmpleadoList().remove(empleadoListEmpleado);
+                    oldCargoOfEmpleadoListEmpleado = em.merge(oldCargoOfEmpleadoListEmpleado);
                 }
             }
             em.getTransaction().commit();
@@ -76,7 +76,7 @@ public class CargoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cargo persistentCargo = em.find(Cargo.class, cargo.getIdcargo());
+            Cargo persistentCargo = em.find(Cargo.class, cargo.getIdCargo());
             List<Empleado> empleadoListOld = persistentCargo.getEmpleadoList();
             List<Empleado> empleadoListNew = cargo.getEmpleadoList();
             List<String> illegalOrphanMessages = null;
@@ -85,7 +85,7 @@ public class CargoJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Empleado " + empleadoListOldEmpleado + " since its idcargo field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Empleado " + empleadoListOldEmpleado + " since its cargo field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -101,12 +101,12 @@ public class CargoJpaController implements Serializable {
             cargo = em.merge(cargo);
             for (Empleado empleadoListNewEmpleado : empleadoListNew) {
                 if (!empleadoListOld.contains(empleadoListNewEmpleado)) {
-                    Cargo oldIdcargoOfEmpleadoListNewEmpleado = empleadoListNewEmpleado.getIdcargo();
-                    empleadoListNewEmpleado.setIdcargo(cargo);
+                    Cargo oldCargoOfEmpleadoListNewEmpleado = empleadoListNewEmpleado.getCargo();
+                    empleadoListNewEmpleado.setCargo(cargo);
                     empleadoListNewEmpleado = em.merge(empleadoListNewEmpleado);
-                    if (oldIdcargoOfEmpleadoListNewEmpleado != null && !oldIdcargoOfEmpleadoListNewEmpleado.equals(cargo)) {
-                        oldIdcargoOfEmpleadoListNewEmpleado.getEmpleadoList().remove(empleadoListNewEmpleado);
-                        oldIdcargoOfEmpleadoListNewEmpleado = em.merge(oldIdcargoOfEmpleadoListNewEmpleado);
+                    if (oldCargoOfEmpleadoListNewEmpleado != null && !oldCargoOfEmpleadoListNewEmpleado.equals(cargo)) {
+                        oldCargoOfEmpleadoListNewEmpleado.getEmpleadoList().remove(empleadoListNewEmpleado);
+                        oldCargoOfEmpleadoListNewEmpleado = em.merge(oldCargoOfEmpleadoListNewEmpleado);
                     }
                 }
             }
@@ -114,7 +114,7 @@ public class CargoJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = cargo.getIdcargo();
+                Integer id = cargo.getIdCargo();
                 if (findCargo(id) == null) {
                     throw new NonexistentEntityException("The cargo with id " + id + " no longer exists.");
                 }
@@ -135,7 +135,7 @@ public class CargoJpaController implements Serializable {
             Cargo cargo;
             try {
                 cargo = em.getReference(Cargo.class, id);
-                cargo.getIdcargo();
+                cargo.getIdCargo();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The cargo with id " + id + " no longer exists.", enfe);
             }
@@ -145,7 +145,7 @@ public class CargoJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Cargo (" + cargo + ") cannot be destroyed since the Empleado " + empleadoListOrphanCheckEmpleado + " in its empleadoList field has a non-nullable idcargo field.");
+                illegalOrphanMessages.add("This Cargo (" + cargo + ") cannot be destroyed since the Empleado " + empleadoListOrphanCheckEmpleado + " in its empleadoList field has a non-nullable cargo field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -204,57 +204,5 @@ public class CargoJpaController implements Serializable {
             em.close();
         }
     }
-
-    public List<Object[]> listar() {
-        EntityManager em = getEntityManager();
-        try {
-            Query q = em.createNamedQuery("Cargo.listar");
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
     
-     public boolean insertarCargo(Cargo cargo) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.persist(cargo);
-            em.getTransaction().commit();
-            return true;
-        } catch (Exception ex) {
-
-            return false;
-
-        }
-    }
-
-    public static void main(String[] args) {
-//        CargoJpaController cargo = new CargoJpaController();
-//        List<Object[]> listar = cargo.listar();
-//        for (Object[] object : listar) {
-//            System.out.println(Arrays.toString(object));
-//        }
-        CargoJpaController cargoJpaController = new CargoJpaController();
-        List<Object[]> lista = cargoJpaController.listar();
-//        for (Object[] objects : lista) {
-//            System.out.println(Arrays.toString(objects));
-//        }
-        // Crear un objeto Datospersonales para insertar
-        Cargo datos = new Cargo();
-        // Establecer los valores para el objeto datos
-//       datos.setIdcargo(2);
-        datos.setNombre("Logistica");
-
-        // Llama al método insertarDatosPersonales y verifica si la inserción fue exitosa
-        boolean insercionExitosa = cargoJpaController.insertarCargo(datos);
-
-        // Verificar el resultado de la inserción
-        if (insercionExitosa) {
-            System.out.println("Datos personales insertados correctamente.");
-        } else {
-            System.out.println("Error al insertar los datos personales.");
-        }
-
-    }
 }

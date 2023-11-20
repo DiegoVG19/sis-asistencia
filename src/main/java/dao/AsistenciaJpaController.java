@@ -30,6 +30,8 @@ public class AsistenciaJpaController implements Serializable {
 
     public AsistenciaJpaController() {
     }
+    
+    
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
