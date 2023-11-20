@@ -85,6 +85,18 @@
             <version>4.8.0</version>
         </dependency>
         <dependency>
+            <groupId>com.github.hazendaz.nodejs</groupId>
+            <artifactId>nodejs</artifactId>
+            <version>12.18.3</version>
+            <type>7z</type>
+            <classifier>win-x64</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.efsavage.jquery</groupId>
+            <artifactId>jquery-maven</artifactId>
+            <version>1.8.2</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
