@@ -98,7 +98,7 @@
                                 <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Activity Log
                             </a>
-                            <a class="dropdown-item" href="CambiarClave.html">
+                            <a class="dropdown-item" href="cambioContra.html">
                                 <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Cambiar Contraseña
                             </a>
@@ -136,7 +136,7 @@
                         </ul>                 
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="principal.html" class="nav-link">
                                     <i class="nav-icon fas fa-table"></i>
                                     <p>
                                         ASISTENCIAS
@@ -172,7 +172,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <div class="content-header">
-                    <h4 class="text-center text-secondary">ASISTENCIA DE EMPLEADOS</h4>
+                    <h4 class="text-center text-secondary">CARGOS REGISTRADOS</h4>
 
                     <div class="container-fluid">
 
@@ -187,11 +187,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">ID</th>
-                                            <th scope="col">EMPLEADO</th>
-                                            <th scope="col">DNI</th>
-                                            <th scope="col">CARGO</th>
-                                            <th scope="col">ENTRADA</th>
-                                            <th scope="col">SALIDA</th>
+                                            <th scope="col">NOMBRE</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -203,8 +199,7 @@
                                             <td>@mdo</td>
                                         </tr>
                                     </tbody>
-                                </table>
-                                <button id="btnGenerarPDF" class="btn btn-primary">Generar PDF</button>
+                                </table>                    
 
                             </div>
                         </div>
@@ -269,7 +264,6 @@
     <
     <script src="js/logout.js"></script>
     <script src="https://kit.fontawesome.com/c637d789ff.js" crossorigin="anonymous"></script>
-    
     <script>
                                 // Función para obtener el valor de una cookie por su nombre
                                 function getCookie(cname) {
@@ -306,9 +300,9 @@
                                         });
 
                                         // Obtener y listar datos en la tabla
-                                        function obtenerYListarDatos() {
+                                        function obtenerYListarCargos() {
                                             $.ajax({
-                                                url: 'obtenerAsistencias',
+                                                url: 'obtenerCargos',
                                                 type: 'GET',
                                                 dataType: 'json',
                                                 success: function (data) {
@@ -317,31 +311,16 @@
 
                                                     // Recorrer los resultados y agregar cada fila a la tabla
                                                     for (var i = 0; i < data.length; i++) {
-                                                        var rowData = data[i];
-
-                                                        // Acceder al valor de CARGO si está presente, de lo contrario, asignar un valor predeterminado
-                                                        var cargoNombre = rowData[8] ? rowData[8] : '';
-
-                                                        // Formatear la fecha de ENTRADA y SALIDA si son objetos Date
-                                                        var entrada = rowData[1] ? new Date(rowData[1].date.year, rowData[1].date.month - 1, rowData[1].date.day, rowData[1].time.hour, rowData[1].time.minute, rowData[1].time.second).toLocaleString() : '';
-                                                        var salida = rowData[2] ? new Date(rowData[2].date.year, rowData[2].date.month - 1, rowData[2].date.day, rowData[2].time.hour, rowData[2].time.minute, rowData[2].time.second).toLocaleString() : '';
-
-                                                        // Agregar el ícono de eliminación con confirmación
-                                                        var deleteIcon = '<a href="#" class="btn btn-danger delete-icon" data-id="' + rowData[0] + '"><i class="fa-solid fa-trash"></i></a>';
-
+                                                        var cargo = data[i];
+                                                        var deleteIcon = '<a href="#" class="btn btn-danger delete-icon" data-id="' + usuario.idUsuario + '"><i class="fa-solid fa-trash"></i></a>';
                                                         var rowHtml = '<tr>' +
-                                                                '<td>' + rowData[0] + '</td>' +
-                                                                '<td>' + rowData[4] + ' ' + rowData[5] + '</td>' +
-                                                                '<td>' + rowData[6] + '</td>' +
-                                                                '<td>' + cargoNombre + '</td>' +
-                                                                '<td>' + entrada + '</td>' +
-                                                                '<td>' + salida + '</td>' +
-                                                                '<td>' + deleteIcon + '</td>' +
+                                                                '<td>' + cargo.id_cargo + '</td>' +
+                                                                '<td>' + cargo.nombre + '</td>' +
+                                                                '<td><a href="#" class="btn btn-danger delete-icon" data-id="' + cargo.id_cargo + '"><i class="fa-solid fa-trash"></i></a></td>' +
                                                                 '</tr>';
                                                         $('#example tbody').append(rowHtml);
                                                     }
 
-                                                    // Agregar evento clic al icono de eliminación
                                                     $('.delete-icon').on('click', function (e) {
                                                         e.preventDefault();
                                                         var id = $(this).data('id');
@@ -349,7 +328,7 @@
                                                         if (confirmDelete) {
                                                             // Enviar el ID al servlet de eliminación
                                                             $.ajax({
-                                                                url: 'eliminarAsistencia?id=' + id,
+                                                                url: 'eliminarCargo?id=' + id,
                                                                 type: 'GET',
                                                                 success: function (response) {
                                                                     console.log(response);
@@ -370,7 +349,7 @@
                                         }
 
                                         // Llamar a la función para obtener y listar datos al cargar la página
-                                        obtenerYListarDatos();
+                                        obtenerYListarCargos();
                                     });
                                 }
     </script>

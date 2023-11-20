@@ -191,6 +191,27 @@ public class CargoJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public void eliminar(Integer id) throws NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Cargo cargo;
+            try {
+                cargo = em.getReference(Cargo.class, id);
+                cargo.getIdCargo();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The cargo with id " + id + " no longer exists.", enfe);
+            }
+            em.remove(cargo);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public int getCargoCount() {
         EntityManager em = getEntityManager();

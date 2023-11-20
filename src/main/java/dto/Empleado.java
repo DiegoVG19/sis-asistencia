@@ -4,6 +4,8 @@
  */
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -57,6 +59,7 @@ public class Empleado implements Serializable {
     @Column(name = "dni")
     private String dni;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
+    @JsonManagedReference
     private List<Asistencia> asistenciaList;
     @JoinColumn(name = "cargo", referencedColumnName = "id_cargo")
     @ManyToOne(optional = false)
@@ -147,5 +150,5 @@ public class Empleado implements Serializable {
     public String toString() {
         return "dto.Empleado[ idEmpleado=" + idEmpleado + " ]";
     }
-    
+
 }

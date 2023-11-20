@@ -187,6 +187,28 @@ public class EmpleadoJpaController implements Serializable {
             }
         }
     }
+    
+     public void eliminar(Integer id) throws NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Empleado empleado;
+            try {
+                empleado = em.getReference(Empleado.class, id);
+                empleado.getIdEmpleado();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.", enfe);
+            }
+            em.remove(empleado);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
 
     public List<Empleado> findEmpleadoEntities() {
         return findEmpleadoEntities(true, -1, -1);

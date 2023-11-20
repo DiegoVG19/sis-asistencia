@@ -4,6 +4,7 @@
  */
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -49,6 +50,7 @@ public class Asistencia implements Serializable {
     private Date salida;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
     @ManyToOne(optional = false)
+    @JsonBackReference
     private Empleado idEmpleado;
 
     public Asistencia() {
@@ -114,5 +116,5 @@ public class Asistencia implements Serializable {
     public String toString() {
         return "dto.Asistencia[ idAsistencia=" + idAsistencia + " ]";
     }
-    
+
 }
