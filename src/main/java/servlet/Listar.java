@@ -5,8 +5,7 @@
 package servlet;
 
 import com.google.gson.Gson;
-import dao.TablaAsistenciaJpaController;
-import dto.TablaAsistencia;
+
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -22,18 +21,18 @@ public class Listar extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         try {
-            // Crea una instancia de AsistenciaJpaController
-            TablaAsistenciaJpaController asistenciaDAO = new TablaAsistenciaJpaController();
-
-            // Obtiene la lista de asistencias desde la base de datos
-            List<TablaAsistencia> asistenciaList = asistenciaDAO.findTablaAsistenciaEntities();
-
-            // Convierte la lista de objetos en formato JSON
-            Gson gson = new Gson();
-            String json = gson.toJson(asistenciaList);
-
-            // Escribe el JSON en la respuesta
-            response.getWriter().write(json);
+//            // Crea una instancia de AsistenciaJpaController
+//            TablaAsistenciaJpaController asistenciaDAO = new TablaAsistenciaJpaController();
+//
+//            // Obtiene la lista de asistencias desde la base de datos
+//            List<TablaAsistencia> asistenciaList = asistenciaDAO.findTablaAsistenciaEntities();
+//
+//            // Convierte la lista de objetos en formato JSON
+//            Gson gson = new Gson();
+//            String json = gson.toJson(asistenciaList);
+//
+//            // Escribe el JSON en la respuesta
+//            response.getWriter().write(json);
         } catch (Exception e) {
             // Maneja cualquier excepción que pueda ocurrir
             e.printStackTrace();

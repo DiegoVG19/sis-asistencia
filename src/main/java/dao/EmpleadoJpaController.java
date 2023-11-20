@@ -11,24 +11,33 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import dto.Datospersonal;
 import dto.Cargo;
+import dto.Empresa;
+import dto.Usuario;
 import dto.Asistencia;
 import dto.Empleado;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
- * @author redcr
+ * @author USER
  */
 public class EmpleadoJpaController implements Serializable {
 
     public EmpleadoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
+
+    public EmpleadoJpaController() {
+    }
+    
+ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("com.mycompany_Asistencia03_war_1.0-SNAPSHOTPU");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -42,10 +51,25 @@ public class EmpleadoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cargo cargo = empleado.getCargo();
-            if (cargo != null) {
-                cargo = em.getReference(cargo.getClass(), cargo.getIdCargo());
-                empleado.setCargo(cargo);
+            Datospersonal idDatos = empleado.getIdDatos();
+            if (idDatos != null) {
+                idDatos = em.getReference(idDatos.getClass(), idDatos.getIdDatos());
+                empleado.setIdDatos(idDatos);
+            }
+            Cargo idcargo = empleado.getIdcargo();
+            if (idcargo != null) {
+                idcargo = em.getReference(idcargo.getClass(), idcargo.getIdcargo());
+                empleado.setIdcargo(idcargo);
+            }
+            Empresa idempresa = empleado.getIdempresa();
+            if (idempresa != null) {
+                idempresa = em.getReference(idempresa.getClass(), idempresa.getIdempresa());
+                empleado.setIdempresa(idempresa);
+            }
+            Usuario usuario = empleado.getUsuario();
+            if (usuario != null) {
+                usuario = em.getReference(usuario.getClass(), usuario.getIdUsuario());
+                empleado.setUsuario(usuario);
             }
             List<Asistencia> attachedAsistenciaList = new ArrayList<Asistencia>();
             for (Asistencia asistenciaListAsistenciaToAttach : empleado.getAsistenciaList()) {
@@ -54,9 +78,26 @@ public class EmpleadoJpaController implements Serializable {
             }
             empleado.setAsistenciaList(attachedAsistenciaList);
             em.persist(empleado);
-            if (cargo != null) {
-                cargo.getEmpleadoList().add(empleado);
-                cargo = em.merge(cargo);
+            if (idDatos != null) {
+                idDatos.getEmpleadoList().add(empleado);
+                idDatos = em.merge(idDatos);
+            }
+            if (idcargo != null) {
+                idcargo.getEmpleadoList().add(empleado);
+                idcargo = em.merge(idcargo);
+            }
+            if (idempresa != null) {
+                idempresa.getEmpleadoList().add(empleado);
+                idempresa = em.merge(idempresa);
+            }
+            if (usuario != null) {
+                Empleado oldIdEmpleadoOfUsuario = usuario.getIdEmpleado();
+                if (oldIdEmpleadoOfUsuario != null) {
+                    oldIdEmpleadoOfUsuario.setUsuario(null);
+                    oldIdEmpleadoOfUsuario = em.merge(oldIdEmpleadoOfUsuario);
+                }
+                usuario.setIdEmpleado(empleado);
+                usuario = em.merge(usuario);
             }
             for (Asistencia asistenciaListAsistencia : empleado.getAsistenciaList()) {
                 Empleado oldIdEmpleadoOfAsistenciaListAsistencia = asistenciaListAsistencia.getIdEmpleado();
@@ -81,11 +122,23 @@ public class EmpleadoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Empleado persistentEmpleado = em.find(Empleado.class, empleado.getIdEmpleado());
-            Cargo cargoOld = persistentEmpleado.getCargo();
-            Cargo cargoNew = empleado.getCargo();
+            Datospersonal idDatosOld = persistentEmpleado.getIdDatos();
+            Datospersonal idDatosNew = empleado.getIdDatos();
+            Cargo idcargoOld = persistentEmpleado.getIdcargo();
+            Cargo idcargoNew = empleado.getIdcargo();
+            Empresa idempresaOld = persistentEmpleado.getIdempresa();
+            Empresa idempresaNew = empleado.getIdempresa();
+            Usuario usuarioOld = persistentEmpleado.getUsuario();
+            Usuario usuarioNew = empleado.getUsuario();
             List<Asistencia> asistenciaListOld = persistentEmpleado.getAsistenciaList();
             List<Asistencia> asistenciaListNew = empleado.getAsistenciaList();
             List<String> illegalOrphanMessages = null;
+            if (usuarioOld != null && !usuarioOld.equals(usuarioNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain Usuario " + usuarioOld + " since its idEmpleado field is not nullable.");
+            }
             for (Asistencia asistenciaListOldAsistencia : asistenciaListOld) {
                 if (!asistenciaListNew.contains(asistenciaListOldAsistencia)) {
                     if (illegalOrphanMessages == null) {
@@ -97,9 +150,21 @@ public class EmpleadoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (cargoNew != null) {
-                cargoNew = em.getReference(cargoNew.getClass(), cargoNew.getIdCargo());
-                empleado.setCargo(cargoNew);
+            if (idDatosNew != null) {
+                idDatosNew = em.getReference(idDatosNew.getClass(), idDatosNew.getIdDatos());
+                empleado.setIdDatos(idDatosNew);
+            }
+            if (idcargoNew != null) {
+                idcargoNew = em.getReference(idcargoNew.getClass(), idcargoNew.getIdcargo());
+                empleado.setIdcargo(idcargoNew);
+            }
+            if (idempresaNew != null) {
+                idempresaNew = em.getReference(idempresaNew.getClass(), idempresaNew.getIdempresa());
+                empleado.setIdempresa(idempresaNew);
+            }
+            if (usuarioNew != null) {
+                usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getIdUsuario());
+                empleado.setUsuario(usuarioNew);
             }
             List<Asistencia> attachedAsistenciaListNew = new ArrayList<Asistencia>();
             for (Asistencia asistenciaListNewAsistenciaToAttach : asistenciaListNew) {
@@ -109,13 +174,38 @@ public class EmpleadoJpaController implements Serializable {
             asistenciaListNew = attachedAsistenciaListNew;
             empleado.setAsistenciaList(asistenciaListNew);
             empleado = em.merge(empleado);
-            if (cargoOld != null && !cargoOld.equals(cargoNew)) {
-                cargoOld.getEmpleadoList().remove(empleado);
-                cargoOld = em.merge(cargoOld);
+            if (idDatosOld != null && !idDatosOld.equals(idDatosNew)) {
+                idDatosOld.getEmpleadoList().remove(empleado);
+                idDatosOld = em.merge(idDatosOld);
             }
-            if (cargoNew != null && !cargoNew.equals(cargoOld)) {
-                cargoNew.getEmpleadoList().add(empleado);
-                cargoNew = em.merge(cargoNew);
+            if (idDatosNew != null && !idDatosNew.equals(idDatosOld)) {
+                idDatosNew.getEmpleadoList().add(empleado);
+                idDatosNew = em.merge(idDatosNew);
+            }
+            if (idcargoOld != null && !idcargoOld.equals(idcargoNew)) {
+                idcargoOld.getEmpleadoList().remove(empleado);
+                idcargoOld = em.merge(idcargoOld);
+            }
+            if (idcargoNew != null && !idcargoNew.equals(idcargoOld)) {
+                idcargoNew.getEmpleadoList().add(empleado);
+                idcargoNew = em.merge(idcargoNew);
+            }
+            if (idempresaOld != null && !idempresaOld.equals(idempresaNew)) {
+                idempresaOld.getEmpleadoList().remove(empleado);
+                idempresaOld = em.merge(idempresaOld);
+            }
+            if (idempresaNew != null && !idempresaNew.equals(idempresaOld)) {
+                idempresaNew.getEmpleadoList().add(empleado);
+                idempresaNew = em.merge(idempresaNew);
+            }
+            if (usuarioNew != null && !usuarioNew.equals(usuarioOld)) {
+                Empleado oldIdEmpleadoOfUsuario = usuarioNew.getIdEmpleado();
+                if (oldIdEmpleadoOfUsuario != null) {
+                    oldIdEmpleadoOfUsuario.setUsuario(null);
+                    oldIdEmpleadoOfUsuario = em.merge(oldIdEmpleadoOfUsuario);
+                }
+                usuarioNew.setIdEmpleado(empleado);
+                usuarioNew = em.merge(usuarioNew);
             }
             for (Asistencia asistenciaListNewAsistencia : asistenciaListNew) {
                 if (!asistenciaListOld.contains(asistenciaListNewAsistencia)) {
@@ -158,6 +248,13 @@ public class EmpleadoJpaController implements Serializable {
                 throw new NonexistentEntityException("The empleado with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
+            Usuario usuarioOrphanCheck = empleado.getUsuario();
+            if (usuarioOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Empleado (" + empleado + ") cannot be destroyed since the Usuario " + usuarioOrphanCheck + " in its usuario field has a non-nullable idEmpleado field.");
+            }
             List<Asistencia> asistenciaListOrphanCheck = empleado.getAsistenciaList();
             for (Asistencia asistenciaListOrphanCheckAsistencia : asistenciaListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -168,10 +265,20 @@ public class EmpleadoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Cargo cargo = empleado.getCargo();
-            if (cargo != null) {
-                cargo.getEmpleadoList().remove(empleado);
-                cargo = em.merge(cargo);
+            Datospersonal idDatos = empleado.getIdDatos();
+            if (idDatos != null) {
+                idDatos.getEmpleadoList().remove(empleado);
+                idDatos = em.merge(idDatos);
+            }
+            Cargo idcargo = empleado.getIdcargo();
+            if (idcargo != null) {
+                idcargo.getEmpleadoList().remove(empleado);
+                idcargo = em.merge(idcargo);
+            }
+            Empresa idempresa = empleado.getIdempresa();
+            if (idempresa != null) {
+                idempresa.getEmpleadoList().remove(empleado);
+                idempresa = em.merge(idempresa);
             }
             em.remove(empleado);
             em.getTransaction().commit();
@@ -225,6 +332,25 @@ public class EmpleadoJpaController implements Serializable {
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
+        }
+    }
+    
+     public List<Object[]> listar() {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("Empleado.listar");
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+      
+
+     public static void main(String[] args) {
+        EmpleadoJpaController empleado=new EmpleadoJpaController();
+        List<Object[]> listar =empleado.listar();
+        for(Object[] object:listar){
+            System.out.println(Arrays.toString(object));
         }
     }
     

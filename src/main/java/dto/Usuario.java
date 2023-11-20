@@ -11,8 +11,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author redcr
+ * @author USER
  */
 @Entity
 @Table(name = "usuario")
@@ -28,9 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findByIdUsuario", query = "SELECT u FROM Usuario u WHERE u.idUsuario = :idUsuario"),
-    @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
+
     @NamedQuery(name = "Usuario.validar", query = "SELECT u FROM Usuario u WHERE u.logiUsua = :logiUsua and u.passUsua = :passUsua"),
-    @NamedQuery(name = "Usuario.findByApellido", query = "SELECT u FROM Usuario u WHERE u.apellido = :apellido"),
+
     @NamedQuery(name = "Usuario.findByLogiUsua", query = "SELECT u FROM Usuario u WHERE u.logiUsua = :logiUsua"),
     @NamedQuery(name = "Usuario.findByPassUsua", query = "SELECT u FROM Usuario u WHERE u.passUsua = :passUsua")})
 public class Usuario implements Serializable {
@@ -41,12 +43,6 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_usuario")
     private Integer idUsuario;
-    @Size(max = 100)
-    @Column(name = "nombre")
-    private String nombre;
-    @Size(max = 100)
-    @Column(name = "apellido")
-    private String apellido;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -57,6 +53,9 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "passUsua")
     private String passUsua;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @OneToOne(optional = false)
+    private Empleado idEmpleado;
 
     public Usuario() {
     }
@@ -79,22 +78,6 @@ public class Usuario implements Serializable {
         this.idUsuario = idUsuario;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
     public String getLogiUsua() {
         return logiUsua;
     }
@@ -109,6 +92,14 @@ public class Usuario implements Serializable {
 
     public void setPassUsua(String passUsua) {
         this.passUsua = passUsua;
+    }
+
+    public Empleado getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Empleado idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     @Override
@@ -135,5 +126,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "dto.Usuario[ idUsuario=" + idUsuario + " ]";
     }
-    
+
 }

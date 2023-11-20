@@ -4,42 +4,69 @@
  */
 package dao;
 
+import dao.exceptions.IllegalOrphanException;
 import dao.exceptions.NonexistentEntityException;
-import dto.Usuario;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import dto.Empleado;
+import dto.Usuario;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
- * @author redcr
+ * @author USER
  */
-public class UsuarioJpaController implements Serializable {
+public class UsuarioJpaController1 implements Serializable {
 
-    public UsuarioJpaController(EntityManagerFactory emf) {
+    public UsuarioJpaController1(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("com.mycompany_Asistencia03_war_1.0-SNAPSHOTPU");
 
-    public UsuarioJpaController() {
+    public UsuarioJpaController1() {
     }
+    
+ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("com.mycompany_Asistencia03_war_1.0-SNAPSHOTPU");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Usuario usuario) {
+    public void create(Usuario usuario) throws IllegalOrphanException {
+        List<String> illegalOrphanMessages = null;
+        Empleado idEmpleadoOrphanCheck = usuario.getIdEmpleado();
+        if (idEmpleadoOrphanCheck != null) {
+            Usuario oldUsuarioOfIdEmpleado = idEmpleadoOrphanCheck.getUsuario();
+            if (oldUsuarioOfIdEmpleado != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("The Empleado " + idEmpleadoOrphanCheck + " already has an item of type Usuario whose idEmpleado column cannot be null. Please make another selection for the idEmpleado field.");
+            }
+        }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Empleado idEmpleado = usuario.getIdEmpleado();
+            if (idEmpleado != null) {
+                idEmpleado = em.getReference(idEmpleado.getClass(), idEmpleado.getIdEmpleado());
+                usuario.setIdEmpleado(idEmpleado);
+            }
             em.persist(usuario);
+            if (idEmpleado != null) {
+                idEmpleado.setUsuario(usuario);
+                idEmpleado = em.merge(idEmpleado);
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -48,12 +75,40 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public void edit(Usuario usuario) throws NonexistentEntityException, Exception {
+    public void edit(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Usuario persistentUsuario = em.find(Usuario.class, usuario.getIdUsuario());
+            Empleado idEmpleadoOld = persistentUsuario.getIdEmpleado();
+            Empleado idEmpleadoNew = usuario.getIdEmpleado();
+            List<String> illegalOrphanMessages = null;
+            if (idEmpleadoNew != null && !idEmpleadoNew.equals(idEmpleadoOld)) {
+                Usuario oldUsuarioOfIdEmpleado = idEmpleadoNew.getUsuario();
+                if (oldUsuarioOfIdEmpleado != null) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("The Empleado " + idEmpleadoNew + " already has an item of type Usuario whose idEmpleado column cannot be null. Please make another selection for the idEmpleado field.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (idEmpleadoNew != null) {
+                idEmpleadoNew = em.getReference(idEmpleadoNew.getClass(), idEmpleadoNew.getIdEmpleado());
+                usuario.setIdEmpleado(idEmpleadoNew);
+            }
             usuario = em.merge(usuario);
+            if (idEmpleadoOld != null && !idEmpleadoOld.equals(idEmpleadoNew)) {
+                idEmpleadoOld.setUsuario(null);
+                idEmpleadoOld = em.merge(idEmpleadoOld);
+            }
+            if (idEmpleadoNew != null && !idEmpleadoNew.equals(idEmpleadoOld)) {
+                idEmpleadoNew.setUsuario(usuario);
+                idEmpleadoNew = em.merge(idEmpleadoNew);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -71,23 +126,6 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public Usuario findUsuarioByUsername(String username) {
-        EntityManager em = getEntityManager();
-        try {
-            Query q = em.createNamedQuery("Usuario.findByLogiUsua");
-            q.setParameter("logiUsua", username);
-            List<Usuario> usuarios = q.getResultList();
-            if (!usuarios.isEmpty()) {
-                // Suponemos que solo habrá un usuario con ese nombre de usuario
-                return usuarios.get(0);
-            } else {
-                return null;
-            }
-        } finally {
-            em.close();
-        }
-    }
-
     public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -99,6 +137,11 @@ public class UsuarioJpaController implements Serializable {
                 usuario.getIdUsuario();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.", enfe);
+            }
+            Empleado idEmpleado = usuario.getIdEmpleado();
+            if (idEmpleado != null) {
+                idEmpleado.setUsuario(null);
+                idEmpleado = em.merge(idEmpleado);
             }
             em.remove(usuario);
             em.getTransaction().commit();
@@ -141,8 +184,7 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
-
-   public Usuario logueo(String usuario, String clave) {
+    public Usuario logueo(String usuario, String clave) {
         EntityManager em = getEntityManager();
         try {
             Query q = em.createNamedQuery("Usuario.validar");
@@ -154,7 +196,6 @@ public class UsuarioJpaController implements Serializable {
             return null;
         }
     }
-
 
     public int getUsuarioCount() {
         EntityManager em = getEntityManager();
@@ -168,5 +209,5 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }

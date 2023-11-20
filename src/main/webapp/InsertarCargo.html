@@ -9,7 +9,10 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Principal</title>
+        <title>Insertar Cargos</title>
+
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/thechaulis.ico">
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -35,7 +38,7 @@
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
-                    <div class="sidebar-brand-text mx-3">INFORMATICA STUDIOS</div>
+                    <div class="sidebar-brand-text mx-3">P.ASISTENCIAS</div>
                 </a>
 
                 <!-- Divider -->
@@ -61,33 +64,18 @@
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                        aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-fw fa-cog"></i>
-                    
+                        <span>Operaciones </span>
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-
+                            <a class="collapse-item" href="listarEmpresa.html"><i class="fa fa-user" aria-hidden="true"></i>
+                                <span>Listado</span>
+                            </a>
                         </div>
                     </div>
                 </li>
 
                 <!-- Nav Item - Utilities Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                       aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-fw fa-cog"></i>
-                        <span>REGISTROS</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                         data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="listarEmpresa.html"><i class="fa fa-user" aria-hidden="true"></i>
-                                <span>DATOS GENERALES</span>
-                            </a>
-                        
-                            
-                        </div>
-                    </div>
-                </li>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
@@ -225,8 +213,30 @@
                         </ul>
 
                     </nav>
+                    <div id="layoutSidenav_content">
+                        <!-- Insertar Cliente -->
+                        <div class="row">
+                            <div class="col-md-4 mx-auto text-center">
+                                <div class="form-group">
+                                    <label>Insertar Cargo:</label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cargo" class="control-label">Cargo:</label>
+                                    <input type="text" id="Cargo" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="btnInsertarCargo" type="submit" value="Registrar" class="btn btn-primary" />
+                                    <a id="btnAtras" class="btn btn-secondary" href="listarEmpresa.html">Cancelar</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                     <!-- End of Topbar -->
                 </div>
+
+
+
                 <!-- End of Main Content -->
 
                 <!-- Footer -->
@@ -270,6 +280,40 @@
             </div>
         </div>
 
+        <!-- Modal Datos Personales Registrado -->
+        <div id="alertClienteRegistrado" class="modal" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Alerta...!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Datos Personales Registrados
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Campos Incompletos -->
+        <div id="alertCamposIncompletos" class="modal" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Alerta...!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Campos incompletos. Ingrese todos los campos por favor.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -280,8 +324,12 @@
         <!-- Custom scripts for all pages-->
         <script src="js/sb-admin-2.min.js"></script>
 
+        <!-- Page level custom scripts -->
+        <script src="js/datospersonales/insertarDatosPersonales.js"></script>
+
         <!-- Page level plugins -->
         <script src="vendor/chart.js/Chart.min.js"></script>
+        <script src="js/Cargo/InsertarCargo.js"></script>
 
         <!-- Page level custom scripts -->
         <script src="js/demo/chart-area-demo.js"></script>
