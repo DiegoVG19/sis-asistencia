@@ -9,6 +9,36 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <style>
+
+        .botones {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        #btnentrada,
+        #btnsalida {
+            width: 100%;
+            padding: 25px 35px;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        #btnentrada {
+            background: rgb(0, 89, 255);
+            color: white;
+            
+        }
+
+        #btnsalida {
+            background: rgb(255, 0, 0);
+            color: white;
+            
+        }
+    </style>
     </head>
 
     <body>
@@ -17,15 +47,14 @@
         <div class="container">
             <a class="acceso" href="login.html">Ingresar al sistema</a>
             <p class="dni">Ingrese su DNI</p>
-            <form action="RegistroAsistenciaServlet" method="post" onsubmit="return validarEntrada()">
-                <input type="text" placeholder="DNI del empleado" name="txtdni" id="txtdni">
-                <div class="botones">
-                    <button type="submit" name="btnentrada" value="ok">ENTRADA</button>
-                    <button type="submit" name="btnsalida" value="ok">SALIDA</button>
-                </div>
-            </form>
-        </div>
 
+            <input type="text" placeholder="DNI del empleado" name="txtdni" id="txtdni">
+            <div class="botones">
+                <button id="btnentrada" onclick="registrarEntrada()">ENTRADA</button>
+                <button id="btnsalida" onclick="registrarSalida()">SALIDA</button>
+            </div>
+
+        </div>
         <script>
             setInterval(() => {
                 let fecha = new Date();
@@ -33,34 +62,42 @@
                 document.getElementById("fecha").textContent = fechaHora;
             }, 1000);
 
-            function validarEntrada() {
-                var dniValue = document.getElementById("txtdni").value;
+            function registrarEntrada() {
+                var dni = document.getElementById("txtdni").value;
 
-                if (dniValue === "") {
+                if (dni === "") {
                     alert("Por favor, ingrese el DNI del empleado.");
-                    return false; // Evita que el formulario se envíe si el DNI está vacío
-                }
-
-                // Envía el DNI al servlet y muestra mensajes según el resultado
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
-                        if (xhr.status == 200) {
-                            // Mensaje de éxito
-                            alert("Entrada registrada correctamente");
+                } else {
+                    // Realizar una solicitud AJAX con jQuery
+                    $.getJSON("registrarEntrada", {dni: dni}, function (data) {
+                        if (data.status === "ok") {
+                            alert("Entrada registrada correctamente.");
+                            // Puedes realizar más acciones aquí después de registrar la entrada
+                            location.reload();
                         } else {
-                            // Mensaje de error
-                            alert("Error: No se pudo registrar la entrada");
+                            alert("Error al registrar la entrada. Mensaje: " + data.message);
                         }
-                    }
-                };
+                    });
+                }
+            }
 
-                // Prepara y envía la solicitud
-                xhr.open("POST", "RegistroAsistenciaServlet", true);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.send("txtdni=" + encodeURIComponent(dniValue));
+            function registrarSalida() {
+                var dni = document.getElementById("txtdni").value;
 
-                return false; // Evita que el formulario se envíe automáticamente
+                if (dni === "") {
+                    alert("Por favor, ingrese el DNI del empleado.");
+                } else {
+                    // Realizar una solicitud AJAX con jQuery
+                    $.getJSON("registrarSalida", {dni: dni}, function (data) {
+                        if (data.status === "ok") {
+                            alert("Salida registrada correctamente.");
+                            // Puedes realizar más acciones aquí después de registrar la salida
+                            location.reload();
+                        } else {
+                            alert("Error al registrar la salida. Mensaje: " + data.message);
+                        }
+                    });
+                }
             }
         </script>
     </body>
