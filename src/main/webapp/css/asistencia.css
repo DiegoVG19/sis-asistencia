@@ -9,55 +9,42 @@ body {
     font-family: 'Nunito Sans', sans-serif;
     background: rgb(217, 226, 236);
 }
-h1{
-text-align: center;
-padding: 20px;
-font-size: 40px;
-color: rgb(56, 56, 56);
+
+h1 {
+    text-align: center;
+    padding: 20px;
+    font-size: 40px;
+    color: rgb(56, 56, 56);
 }
-#fecha{
+
+#fecha {
     text-align: center;
     color: rgb(148, 148, 148);
     font-weight: normal;
     font-size: 30px;
 }
-.container{
+
+.container {
     width: 700px;
     background: white;
     padding: 20px;
     margin: auto;
     margin-top: 20px;
 }
-.acceso{
+
+.acceso {
     color: rgb(0, 89, 255);
 }
-.dni{
+
+.dni {
     text-align: center;
     font-size: 25px;
     margin-bottom: 20px;
 }
-input{
-    width: 100%;
+
+input {
+    width: calc(100% - 60px); /* Ajuste para compensar el padding en los botones */
     padding: 30px;
     outline: none;
 }
-.botones{
-    display: flex;
-    margin-top: 10px;
-}
-.entrada{
-background: rgb(0, 89, 255);
-width: 100%;
-padding: 25px 35px;
-color: white;
-text-align: center;
-text-decoration: none;
-}
-.salida{
-background: rgb(255, 0, 0);
-width: 100%;
-padding: 25px 35px;
-color: white;
-text-align: center;
-text-decoration: none;
-}
+
