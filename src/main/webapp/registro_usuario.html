@@ -31,10 +31,83 @@
         <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
         <!-- summernote -->
         <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+        <style>
+            form {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
 
+            .fl-flex-label {
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0 auto; /* Centra horizontalmente las cajas de texto */
+                margin-bottom: 40px;
+                padding: 0 15px;
+            }
 
+            /* Anula algunos estilos de Bootstrap para input en este contexto específico */
+            .fl-flex-label input[type="text"],
+            .fl-flex-label input[type="password"] {
+                width: 100%;
+                padding: 10px; /* Ajusta el relleno según tus necesidades */
+                box-sizing: border-box;
+                margin-bottom: 10px;
+                margin-left: 10px;
+            }
 
+            .text-right-custom {
+                text-align: right;
+            }
 
+            /* Ajusta el margen entre los botones según tus necesidades */
+            .text-right-custom .btn {
+                margin-right: 5px;
+            }
+
+            /* Ajusta el margen a la izquierda del primer botón */
+            .text-right-custom .btn:first-child {
+                margin-left: 50px; /* Ajusta el margen izquierdo según tus necesidades */
+            }
+
+        </style>
+        <script>
+            $(document).ready(function () {
+                // Capturar el evento submit del formulario
+                $("form[name='registrarFormulario']").submit(function (event) {
+                    // Prevenir el envío del formulario por defecto
+                    event.preventDefault();
+
+                    // Realizar una solicitud AJAX para verificar el estado del registro
+                    $.ajax({
+                        url: "registrarUsuario", // Reemplaza esto con la URL correcta de tu servlet
+                        type: "POST",
+                        dataType: "json", // Esperamos una respuesta JSON
+                        data: $(this).serialize(), // Serializar el formulario para enviar datos
+                        success: function (data) {
+                            // Verificar el valor de registroExitoso en la respuesta
+                            var registroExitoso = data.registroExitoso;
+
+                            // Convertir a booleano si es una cadena
+                            if (typeof registroExitoso === 'string') {
+                                registroExitoso = registroExitoso.toLowerCase() === 'true';
+                            }
+
+                            // Mostrar mensaje según el resultado del registro
+                            if (registroExitoso) {
+                                alert("¡Registro exitoso!");
+                            } else {
+                                alert("Error en el registro. Por favor, inténtelo de nuevo.");
+                            }
+                        },
+                        error: function () {
+                            // Manejar errores en la solicitud AJAX
+                            alert("Error en la solicitud AJAX. Por favor, inténtelo de nuevo.");
+                        }
+                    });
+                });
+            });
+        </script>
 
 
     </head>
@@ -80,7 +153,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="nombreUsuario"></span>
-                            <img class="img-profile rounded-circle" src="dist/img/6326055.png" style="width: 35px; height: 35px;">
+                            <img class="img-profile rounded-circle" src="dist/img/6326055.png" style="width: 35px;
+                                 height: 35px;">
                         </a>
 
                         <!-- Dropdown - User Information -->
@@ -172,103 +246,84 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <div class="content-header">
-                    <h4 class="text-center text-secondary">EMPLEADOS REGISTRADOS</h4>
+                    <h4 class="text-center text-secondary">REGISTRO DE USUARIOS</h4>
 
-                    <div class="container-fluid">
-
-                        <!-- Page Heading -->
-
-
-                        <!-- DataTales Example -->
-
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover col-12" id="example">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">NOMBRES</th>
-                                            <th scope="col">APELLIDOS</th>
-                                            <th scope="col">DNI</th>
-                                            <th scope="col">CARGO</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                        </tr>
-                                    </tbody>
-                                </table>                    
-
+                    <div class="row">
+                        <form action="registrarUsuario" method="POST" name="registrarFormulario">
+                            <div class="fl-flex-label mb-4 px-2 col-12 col-md-6">
+                                <input type="text" placeholder="Nombre" class="input input__text" name="txtnombre" id="txtnombre">
                             </div>
-                        </div>
+                            <div class="fl-flex-label mb-4 px-2 col-12 col-md-6">
+                                <input type="text" placeholder="Apellido" class="input input__text" name="txtapellido" id="txtapellido">
+                            </div>
+                            <div class="fl-flex-label mb-4 px-2 col-12 col-md-6">
+                                <input type="text" placeholder="Usuario" class="input input__text" name="txtusuario" id="txtusuario">
+                            </div>
+                            <div class="fl-flex-label mb-4 px-2 col-12 col-md-6">
+                                <input type="password" placeholder="Contraseña" class="input input__text" name="txtclave" id="txtclave">
+                            </div>
+                            <div class="d-flex justify-content-end p-2">
+                                <a href="usuario.html" class="btn btn-secondary btn-rounded mr-2">Atras</a>
+                                <button type="submit" class="btn btn-primary btn-rounded" onclick="validarFormulario()">Registrar</button>
+                            </div>
+                        </form>
                     </div>
+                    <!-- /.content-header -->
 
+                    <!-- Main content -->
+
+                    <!-- /.Left col -->
+                    <!-- right col (We are only adding the ID to make the widgets sortable)-->
+
+                    <!-- /.content -->
                 </div>
-
             </div>
-            <!-- /.content-header -->
-
-            <!-- Main content -->
-
-            <!-- /.Left col -->
-            <!-- right col (We are only adding the ID to make the widgets sortable)-->
-
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
+            <!-- /.content-wrapper -->
 
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+                <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
 
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-                                $.widget.bridge('uibutton', $.ui.button)
-    </script>
-    <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="plugins/chart.js/Chart.min.js"></script>
-    <!-- Sparkline -->
-    <script src="plugins/sparklines/sparkline.js"></script>
-    <!-- JQVMap -->
-    <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="plugins/moment/moment.min.js"></script>
-    <script src="plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- Summernote -->
-    <script src="plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <
-    <script src="js/logout.js"></script>
-    <script src="https://kit.fontawesome.com/c637d789ff.js" crossorigin="anonymous"></script>
+            <!-- ./wrapper -->
 
-    <script src="js/empleado.js"></script>
+            <!-- jQuery -->
+            <script src="plugins/jquery/jquery.min.js"></script>
+            <!-- jQuery UI 1.11.4 -->
+            <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+            <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+            <script>
+                                    $.widget.bridge('uibutton', $.ui.button);
+            </script>
+            <!-- Bootstrap 4 -->
+            <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- ChartJS -->
+            <script src="plugins/chart.js/Chart.min.js"></script>
+            <!-- Sparkline -->
+            <script src="plugins/sparklines/sparkline.js"></script>
+            <!-- JQVMap -->
+            <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+            <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+            <!-- jQuery Knob Chart -->
+            <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+            <!-- daterangepicker -->
+            <script src="plugins/moment/moment.min.js"></script>
+            <script src="plugins/daterangepicker/daterangepicker.js"></script>
+            <!-- Tempusdominus Bootstrap 4 -->
+            <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+            <!-- Summernote -->
+            <script src="plugins/summernote/summernote-bs4.min.js"></script>
+            <!-- overlayScrollbars -->
+            <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+            <!-- AdminLTE App -->
+            <script src="dist/js/adminlte.js"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="dist/js/demo.js"></script>
+            <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
-</body>
+            <script src="js/logout.js"></script>
+            <script src="https://kit.fontawesome.com/c637d789ff.js" crossorigin="anonymous"></script>
+    </body>
 </html>

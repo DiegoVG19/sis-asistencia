@@ -183,6 +183,7 @@
 
                         <div class="card-body">
                             <div class="table-responsive">
+                                <a href="registro_usuario.html" class="btn btn-primary btn-rounded mb-3"><i class="fa-solid fa-plus"></i> &nbsp;Registrar</a>
                                 <table class="table table-bordered table-hover col-12" id="example">
                                     <thead>
                                         <tr>
@@ -221,151 +222,242 @@
         </div>
         <!-- /.content-wrapper -->
 
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary edit-icon" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Launch static backdrop modal
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">EDITAR USUARIO</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Contenido del modal -->
+                        <form id="editarUsuarioForm" action="" method="POST">
+                            <div class="fl-flex-label mb-4 px-2 col-12">
+                                <input type="text" placeholder="Nombre" class="input input__text" name="txtnombre" id="txtnombre">
+                            </div>
+                            <div class="fl-flex-label mb-4 px-2 col-12">
+                                <input type="text" placeholder="Apellido" class="input input__text" name="txtapellido" id="txtapellido">
+                            </div>
+                            <div class="fl-flex-label mb-4 px-2 col-12">
+                                <input type="text" placeholder="Usuario" class="input input__text" name="txtusuario" id="txtusuario">
+                            </div>
+                            <div class="fl-flex-label mb-4 px-2 col-12">
+                                <input type="password" placeholder="Clave" class="input input__text" name="txtclave" id="txtclave">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
+                        <button type="button" class="btn btn-primary" onclick="guardarUsuario()">GUARDAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
         </aside>
         <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
 
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-                                $.widget.bridge('uibutton', $.ui.button)
-    </script>
-    <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="plugins/chart.js/Chart.min.js"></script>
-    <!-- Sparkline -->
-    <script src="plugins/sparklines/sparkline.js"></script>
-    <!-- JQVMap -->
-    <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="plugins/moment/moment.min.js"></script>
-    <script src="plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- Summernote -->
-    <script src="plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <
-    <script src="js/logout.js"></script>
-    <script src="https://kit.fontawesome.com/c637d789ff.js" crossorigin="anonymous"></script>
+        <!-- ./wrapper -->
 
-
-    <script>
-                                // Función para obtener el valor de una cookie por su nombre
-                                function getCookie(cname) {
-                                    let name = cname + "=";
-                                    let decodedCookie = decodeURIComponent(document.cookie);
-                                    let ca = decodedCookie.split(';');
-                                    for (let i = 0; i < ca.length; i++) {
-                                        let c = ca[i];
-                                        while (c.charAt(0) === ' ') {
-                                            c = c.substring(1);
-                                        }
-                                        if (c.indexOf(name) === 0) {
-                                            return c.substring(name.length, c.length);
-                                        }
+        <!-- jQuery -->
+        <script src="plugins/jquery/jquery.min.js"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Resuelve el conflicto en jQuery UI tooltip con Bootstrap tooltip -->
+        <script>
+                            $.widget.bridge('uibutton', $.ui.button);
+        </script>
+        <!-- Bootstrap 4 -->
+        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- ChartJS -->
+        <script src="plugins/chart.js/Chart.min.js"></script>
+        <!-- Sparkline -->
+        <script src="plugins/sparklines/sparkline.js"></script>
+        <!-- JQVMap -->
+        <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+        <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+        <!-- jQuery Knob Chart -->
+        <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+        <!-- daterangepicker -->
+        <script src="plugins/moment/moment.min.js"></script>
+        <script src="plugins/daterangepicker/daterangepicker.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- Summernote -->
+        <script src="plugins/summernote/summernote-bs4.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="dist/js/adminlte.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="dist/js/demo.js"></script>
+        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+        <
+        <script src="js/logout.js"></script>
+        <script src="https://kit.fontawesome.com/c637d789ff.js" crossorigin="anonymous"></script>
+        <script>
+                            // Función para obtener el valor de una cookie por su nombre
+                            function getCookie(cname) {
+                                let name = cname + "=";
+                                let decodedCookie = decodeURIComponent(document.cookie);
+                                let ca = decodedCookie.split(';');
+                                for (let i = 0; i < ca.length; i++) {
+                                    let c = ca[i];
+                                    while (c.charAt(0) === ' ') {
+                                        c = c.substring(1);
                                     }
-                                    return "";
+                                    if (c.indexOf(name) === 0) {
+                                        return c.substring(name.length, c.length);
+                                    }
                                 }
+                                return "";
+                            }
 
-                                // Comprobar si el usuario ha iniciado sesión
-                                let token = getCookie("token");
-                                if (token === "") {
-                                    // Si no hay token, redirigir a la página de inicio de sesión
-                                    window.location.href = "login.html";
-                                } else {
-                                    // El usuario tiene un token, realizar otras operaciones aquí si es necesario
-                                    $(document).ready(function () {
-                                        let usuario = getCookie("usuario");
-                                        $.getJSON("obtenerUsuario", {usuario: usuario}, function (data) {
-                                            if (data.error) {
-                                                console.error("Error: " + data.error);
-                                            } else {
-                                                $("#nombreUsuario").text(data.nombreCompleto);
+                            // Comprobar si el usuario ha iniciado sesión
+                            let token = getCookie("token");
+                            if (token === "") {
+                                // Si no hay token, redirigir a la página de inicio de sesión
+                                window.location.href = "login.html";
+                            } else {
+                                // El usuario tiene un token, realizar otras operaciones aquí si es necesario
+                                $(document).ready(function () {
+                                    let usuario = getCookie("usuario");
+                                    $.getJSON("obtenerUsuario", {usuario: usuario}, function (data) {
+                                        if (data.error) {
+                                            console.error("Error: " + data.error);
+                                        } else {
+                                            $("#nombreUsuario").text(data.nombreCompleto);
+                                        }
+                                    });
+
+                                    // Obtener y listar datos en la tabla
+                                    function obtenerYListarUsuarios() {
+                                        $.ajax({
+                                            url: 'obtenerUsuarios',
+                                            type: 'GET',
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                // Limpiar la tabla antes de agregar nuevos datos
+                                                $('#example tbody').empty();
+
+                                                // Recorrer los resultados y agregar cada fila a la tabla
+                                                for (var i = 0; i < data.length; i++) {
+                                                    var usuario = data[i];
+
+                                                    var deleteIcon = '<a href="#" class="btn btn-danger delete-icon" data-id="' + usuario.idUsuario + '"><i class="fa-solid fa-trash"></i></a>';
+                                                    var editIcon = '<a href="#" class="btn btn-warning edit-icon" data-toggle="modal" data-target="#exampleModal" data-id="' + usuario.idUsuario + '"><i class="fa-solid fa-pen-to-square"></i></a>';
+                                                    var rowHtml = '<tr>' +
+                                                            '<td>' + usuario.idUsuario + '</td>' +
+                                                            '<td>' + usuario.nombre + '</td>' +
+                                                            '<td>' + usuario.apellido + '</td>' +
+                                                            '<td>' + usuario.logiUsua + '</td>' +
+                                                            '<td>' + editIcon + '  ' + deleteIcon + '</td>' +
+                                                            '</tr>';
+                                                    $('#example tbody').append(rowHtml);
+                                                }
+                                                $('.delete-icon').on('click', function (e) {
+                                                    e.preventDefault();
+                                                    var id = $(this).data('id');
+                                                    var confirmDelete = confirm('¿Realmente desea eliminar este registro?');
+                                                    if (confirmDelete) {
+                                                        $.ajax({
+                                                            url: 'eliminarUsuario?id=' + id,
+                                                            type: 'GET',
+                                                            success: function (response) {
+                                                                console.log(response);
+                                                                location.reload();
+                                                            },
+                                                            error: function (error) {
+                                                                console.error(error);
+                                                            }
+                                                        });
+                                                    }
+                                                });
+
+                                                // Modificar la asignación del evento click para el icono de edición
+                                                $('.edit-icon').on('click', function (e) {
+                                                    e.preventDefault();
+                                                    var id = $(this).data('id');
+
+                                                    // Abre el modal y establece el 'id' en el botón de guardar
+                                                    $('#staticBackdrop').modal('show');
+                                                    $('#guardarBoton').data('id', id);
+
+                                                    console.log("Botón de editar clicado. ID: " + id);
+                                                });
+                                                $(document).on('click', '#guardarBoton', guardarUsuario);
+                                            },
+                                            error: function (error) {
+                                                console.error(error);
                                             }
                                         });
+                                    }
 
-                                        // Obtener y listar datos en la tabla
-                                        function obtenerYListarUsuarios() {
-                                            $.ajax({
-                                                url: 'obtenerUsuarios', // Cambiado a 'listarUsuarios' según el servlet proporcionado
-                                                type: 'GET',
-                                                dataType: 'json',
-                                                success: function (data) {
-                                                    // Limpiar la tabla antes de agregar nuevos datos
-                                                    $('#example tbody').empty();
+                                    // Llamar a la función para obtener y listar datos al cargar la página
+                                    obtenerYListarUsuarios();
 
-                                                    // Recorrer los resultados y agregar cada fila a la tabla
-                                                    for (var i = 0; i < data.length; i++) {
-                                                        var usuario = data[i];
+                                    // Función para abrir la ventana modal
+                                    function abrirVentanaModal() {
+                                        $('#exampleModal').modal('show');
+                                    }
+                                });
+                            }
+        </script>
+        <script>
 
-                                                        // Ajusta esta línea para usar la variable 'usuario' en lugar de 'rowData'
-                                                        var deleteIcon = '<a href="#" class="btn btn-danger delete-icon" data-id="' + usuario.idUsuario + '"><i class="fa-solid fa-trash"></i></a>';
+            function guardarUsuario() {
+                // Recuperar los valores de las cajas de texto
+                var id = $('#guardarBoton').data('id');
+                var nombre = $('#txtnombre').val();
+                var apellido = $('#txtapellido').val();
+                var usuario = $('#txtusuario').val();
+                var clave = $('#txtclave').val();
 
-                                                        var rowHtml = '<tr>' +
-                                                                '<td>' + usuario.idUsuario + '</td>' +
-                                                                '<td>' + usuario.nombre + '</td>' +
-                                                                '<td>' + usuario.apellido + '</td>' +
-                                                                '<td>' + usuario.logiUsua + '</td>' +
-                                                                '<td>' + deleteIcon + '</td>' +
-                                                                '</tr>';
-                                                        $('#example tbody').append(rowHtml);
-                                                    }
-                                                    $('.delete-icon').on('click', function (e) {
-                                                        e.preventDefault();
-                                                        var id = $(this).data('id');
-                                                        var confirmDelete = confirm('¿Realmente desea eliminar este registro?');
-                                                        if (confirmDelete) {
-                                                            // Enviar el ID al servlet de eliminación
-                                                            $.ajax({
-                                                                url: 'eliminarUsuario?id=' + id,
-                                                                type: 'GET',
-                                                                success: function (response) {
-                                                                    console.log(response);
-                                                                    // Actualizar la tabla después de la eliminación
-                                                                    location.reload();
-                                                                },
-                                                                error: function (error) {
-                                                                    console.error(error);
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                },
-                                                error: function (error) {
-                                                    console.error(error);
-                                                }
-                                            });
-                                        }
+                // Puedes hacer alguna validación antes de enviar los datos al servlet
 
-                                        // Llamar a la función para obtener y listar datos al cargar la página
-                                        obtenerYListarUsuarios();
-                                    });
-                                }
-    </script>
+                // Enviar los datos al servlet usando AJAX
+                $.ajax({
+                    url: 'modificarUsua',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        txtnombre: nombre,
+                        txtapellido: apellido,
+                        txtusuario: usuario,
+                        txtclave: clave
+                    },
+                    success: function (response) {
+                        // Verificar la respuesta del servidor
+                        if (response.includes("modificado con éxito")) {
+                            // Mostrar mensaje de éxito
+                            alert("Error al intentar modificar los datos");
+                        } else {
+                            // Mostrar mensaje de error
+                            alert("Datos actualizados correctamente");
+                            location.reload();
+                        }
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        // Mostrar mensaje de error
+                        alert("Error al intentar modificar los datos");
+                    }
+                });
 
+                // Cerrar el modal
+                $('#staticBackdrop').modal('hide');
+            }
 
-
-
-
-
-</body>
+        </script>
+    </body>
 </html>

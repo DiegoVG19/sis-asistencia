@@ -134,6 +134,18 @@ public class UsuarioJpaController implements Serializable {
             return null;
         }
     }
+    
+    public Usuario validar( String clave) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("Usuario.findByPassUsua");
+            q.setParameter("passUsua", clave);
+            Usuario pers = (Usuario) q.getSingleResult();
+            return pers;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     private List<Usuario> findUsuarioEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();

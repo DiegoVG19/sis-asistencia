@@ -80,11 +80,6 @@
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>com.innoventsolutions.birt.runtime</groupId>
-            <artifactId>com.lowagie.text_2.1.7.v201004222200</artifactId>
-            <version>4.8.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.hazendaz.nodejs</groupId>
             <artifactId>nodejs</artifactId>
             <version>12.18.3</version>
@@ -126,11 +121,22 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.6</version> <!-- o la versión que estés utilizando -->
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.68</version>
+        </dependency>
+
     </dependencies>
 
     <build>

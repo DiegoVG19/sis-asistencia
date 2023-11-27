@@ -270,7 +270,6 @@
         <
         <script src="js/logout.js"></script>
         <script src="https://kit.fontawesome.com/c637d789ff.js" crossorigin="anonymous"></script>
-
         <script>
                                 // Función para obtener el valor de una cookie por su nombre
                                 function getCookie(cname) {
@@ -376,6 +375,25 @@
                                 }
         </script>
 
+        <script>
+            $(document).ready(function () {
+                $("#btnGenerarPDF").click(function () {
+                    // Realizar una solicitud AJAX al servlet
+                    $.ajax({
+                        type: "GET",
+                        url: "generarPdf", // Ajusta la URL según tu configuración
+                        success: function (response) {
+                            // Abrir el PDF en una nueva ventana o pestaña
+                            window.open("generarPdf" );
+                        },
+                        error: function (error) {
+                            console.error("Error al generar el PDF", error);
+                            // Manejar el error según tus necesidades
+                        }
+                    });
+                });
+            });
+        </script>
 
     </body>
 </html>
