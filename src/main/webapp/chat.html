@@ -53,78 +53,16 @@
             <div class="wrapper">
                 <nav id="sidebar" class="sidebar">
                     <div class="form-inline">
-                        <div class="input-group" data-widget="sidebar-search">
-                            <input class="form-control form-control-sidebar" type="search" placeholder="Busca un chat" aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-sidebar">
-                                    <i class="fas fa-search fa-fw"></i>
-                                </button>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            <img src="img/user3-128x128.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
                         </div>
                         <div class="info">
-                            <a href="#" class="d-block">Sarah Bullock</a>
+                            <a href="#" class="d-block">ADMINISTRADOR</a>
                         </div>
                     </div>
-                    <div class="user-panel mt-2 pb-2 mb-2 d-flex">
-                        <div class="image">
-                            <img src="img/0x0.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
-                        </div>
-                        <div class="info">
-                            <a href="#" class="d-block">
-                                <p>
-                                    Larry Ellison
-                                    <span class="right badge badge-danger">5</span>
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="user-panel mt-2 pb-2 mb-2 d-flex">
-                        <div class="image">
-                            <img src="img/1605619247378.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
-                        </div>
-                        <div class="info">
-                            <a href="#" class="d-block">
-
-                                <p>
-                                    Michael Bloomberg
-                                    <span class="badge badge-info right">3</span>
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="user-panel mt-2 pb-2 mb-2 d-flex">
-                        <div class="image">
-                            <img src="img/bill.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
-                        </div>
-                        <div class="info">
-                            <a href="#" class="d-block">
-
-                                <p>
-                                    Bill Gates
-                                    <span class="badge badge-danger right">8</span>
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="user-panel mt-2 pb-2 mb-2 d-flex">
-                        <div class="image">
-                            <img src="img/000.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
-                        </div>
-                        <div class="info">
-                            <a href="#" class="d-block">
-
-                                <p>
-                                    Warren Buffett
-                                    <span class="badge badge-info right">2</span>
-                                </p>
-                            </a>
-                        </div>
-                    </div>
+                    
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             <li class="nav-header">OPCIONES</li>
@@ -135,20 +73,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="index.html" class="nav-link">
+                                <a href="login.html" class="nav-link">
                                     <i class="nav-icon far fa-circle text-danger"></i>
                                     <p class="text">SALIR</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon far fa-circle text-warning"></i>
-                                    <p class="text">
-                                        <i class="fas fa-angle-left right"></i>
-                                        <span class="badge badge-info right">2</span>
-                                        TEMA</p>
-                                </a>
-                            </li>
+                           
                         </ul>
                     </nav>
                 </nav>
@@ -162,18 +92,8 @@
                         <section class="col-lg-7 connectedSortable">
                             <!-- DIRECT CHAT -->
                             <div class="card direct-chat direct-chat-primary sidebar-dark-primary" style="width: 174%; height: 102%; margin: 0;">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="card-title text-white" style="margin-right: 10px;">Usuario:</h3>
-                                    <div class="input-group" style="width: 200px; margin-right: 510px;">
-                                        <input type="text" id="usuarioinput" name="message" placeholder="Escribe un Nombre" class="form-control">
-                                    </div>
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-success btn-sm" onclick="openSocket();">
-                                            <i class="fa fa-plus text-white"> Abrir</i>	
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="closeSocket();">
-                                            <i class="fa fa-times text-white"> Cerrar</i>
-                                        </button>
+                                <div class="card-header d-flex justify-content-between align-items-center">                                   
+                                    <div class="card-tools">                                       
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                             <i class="fas fa-search fa-fw"></i>
                                         </button>
@@ -252,77 +172,6 @@
         </div>
         <div id="mensaje-a1"></div>
         <div id="messages"></div>
-        <script type="text/javascript">
-            var webSocket;
-            var messages = document.getElementById("messages");
-            function openSocket() {
-                if (webSocket !== undefined && webSocket.readyState
-                        !== WebSocket.CLOSED)
-                {
-                    var mensaje = "WebSocket ya está abierto";
-                    var divMensaje = document.getElementById("mensaje-a1");
-                    divMensaje.innerHTML = mensaje;
-                    return;
-                }
-                var appPath = document.location.pathname.split('/').slice(0, -1).join('/');
-                webSocket = new WebSocket("ws://" + document.location.host + appPath + "/proceso");
-                webSocket.onopen = function (event)
-                {
-                    if (event.data === undefined)
-                        return;
-                    writeResponse(event.data);
-                };
-                webSocket.onmessage = function (event)
-                {
-                    let o = JSON.parse(event.data);
-                    writeResponse("USUARIO: " + o.usuario);
-                    writeResponse("MENSAJE: " + o.text);
-                    writeResponse("FECHA: " + o.fecha);
-                    //writeResponse("NIVEL: " + o.nivel);
-                    writeResponse("-----------------------");
-                };
-                webSocket.onclose = function (event)
-                {
-                    var mensaje = "Conexion cerrada";
-                    var divMensaje = document.getElementById("mensaje-a1");
-                    divMensaje.innerHTML = mensaje;
-                };
-            }
-            function send()
-            {
-                try {
-                    let usuario = document.getElementById("usuarioinput").value;
-                    let text = document.getElementById("messageinput").value;
-                    let fecha = document.getElementById("fechainput").value;
-                    let usuarioCif = cifrar(usuario, "1234");
-                    let textCif = cifrar(text, "1234");
-                    let fechaCif = cifrar(fecha, "1234");
-                    let mensaje = {usuario: usuarioCif, text: textCif, fecha: fechaCif};
-                    let mensajeJSON = JSON.stringify(mensaje);
-                    webSocket.send(mensajeJSON);
-                    document.getElementById("messageinput").value = "";
-                } catch (err) {
-                }
-            }
-            function closeSocket()
-            {
-                try {
-                    webSocket.close();
-                } catch (err) {
-                }
-            }
-            function writeResponse(text)
-            {
-                otroInput.value += text + "\n";
-            }
-            function cifrar(message, key) {
-                var keyHex = CryptoJS.enc.Utf8.parse(key);
-                var encrypted = CryptoJS.AES.encrypt(message, keyHex, {//se difra usando des
-                    mode: CryptoJS.mode.ECB, //se espezifika el modo
-                    padding: CryptoJS.pad.Pkcs7//y el resheno, el 5 tiene definido 8 bits, y el 7 tambien, pero puede ser modificado a mas, pero si no le pones ningun parametro, trabajara con 5
-                });
-                return encrypted.toString();
-            }
-        </script>
+       
     </body>
 </html>
