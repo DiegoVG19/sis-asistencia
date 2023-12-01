@@ -53,16 +53,78 @@
             <div class="wrapper">
                 <nav id="sidebar" class="sidebar">
                     <div class="form-inline">
-                        
+                        <div class="input-group" data-widget="sidebar-search">
+                            <input class="form-control form-control-sidebar" type="search" placeholder="Busca un chat" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-sidebar">
+                                    <i class="fas fa-search fa-fw"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
+                            <img src="img/user3-128x128.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
                         </div>
                         <div class="info">
-                            <a href="#" class="d-block">ADMINISTRADOR</a>
+                            <a href="#" class="d-block">Sarah Bullock</a>
                         </div>
                     </div>
-                    
+                    <div class="user-panel mt-2 pb-2 mb-2 d-flex">
+                        <div class="image">
+                            <img src="img/0x0.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">
+                                <p>
+                                    Larry Ellison
+                                    <span class="right badge badge-danger">5</span>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="user-panel mt-2 pb-2 mb-2 d-flex">
+                        <div class="image">
+                            <img src="img/1605619247378.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">
+
+                                <p>
+                                    Michael Bloomberg
+                                    <span class="badge badge-info right">3</span>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="user-panel mt-2 pb-2 mb-2 d-flex">
+                        <div class="image">
+                            <img src="img/bill.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">
+
+                                <p>
+                                    Bill Gates
+                                    <span class="badge badge-danger right">8</span>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="user-panel mt-2 pb-2 mb-2 d-flex">
+                        <div class="image">
+                            <img src="img/000.jpg" class="img-circle elevation-2" alt="User Image" style="width: 35px; height: 35px;">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">
+
+                                <p>
+                                    Warren Buffett
+                                    <span class="badge badge-info right">2</span>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             <li class="nav-header">OPCIONES</li>
@@ -73,12 +135,20 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="login.html" class="nav-link">
+                                <a href="index.html" class="nav-link">
                                     <i class="nav-icon far fa-circle text-danger"></i>
                                     <p class="text">SALIR</p>
                                 </a>
                             </li>
-                           
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon far fa-circle text-warning"></i>
+                                    <p class="text">
+                                        <i class="fas fa-angle-left right"></i>
+                                        <span class="badge badge-info right">2</span>
+                                        TEMA</p>
+                                </a>
+                            </li>
                         </ul>
                     </nav>
                 </nav>
@@ -93,7 +163,13 @@
                             <!-- DIRECT CHAT -->
                             <div class="card direct-chat direct-chat-primary sidebar-dark-primary" style="width: 174%; height: 102%; margin: 0;">
                                 <div class="card-header d-flex justify-content-between align-items-center">                                   
-                                    <div class="card-tools">                                       
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-success btn-sm" onclick="openSocket();">
+                                            <i class="fa fa-plus text-white"> Abrir</i>	
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="closeSocket();">
+                                            <i class="fa fa-times text-white"> Cerrar</i>
+                                        </button>
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                             <i class="fas fa-search fa-fw"></i>
                                         </button>
