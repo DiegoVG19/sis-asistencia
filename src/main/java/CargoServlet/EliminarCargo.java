@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package servlet;
+package CargoServlet;
 
-import dao.EmpleadoJpaController;
-import dao.exceptions.NonexistentEntityException;
+import dao.CargoJpaController;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,15 +16,15 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author redcr
  */
-@WebServlet("/eliminarEmpleado")
-public class EliminarEmpleado extends HttpServlet {
+@WebServlet(name = "EliminarCargo", urlPatterns = {"/eliminarCargo"})
+public class EliminarCargo extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private final EmpleadoJpaController empleadoController;
+    private final CargoJpaController empleadoController;
 
-    public EliminarEmpleado() {
-        // Utilizamos la misma EntityManagerFactory que ya tienes configurada en EmpleadoJpaController
-        empleadoController = new EmpleadoJpaController();
+    public EliminarCargo() {
+        // Utilizamos la misma EntityManagerFactory que ya tienes configurada en CargoJpaController
+        empleadoController = new CargoJpaController();
     }
 
     @Override
@@ -49,11 +48,8 @@ public class EliminarEmpleado extends HttpServlet {
                 // Enviar una respuesta de error si el ID no es un número válido
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.getWriter().println("Error: El ID no es un número válido");
-            } catch (NonexistentEntityException e) {
-                // Enviar una respuesta de error si no se encuentra el empleado por el ID
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().println("Error: No se encontró el empleado con el ID especificado");
-            } catch (Exception e) {
+            } // Enviar una respuesta de error si no se encuentra el empleado por el ID
+            catch (Exception e) {
                 // Enviar una respuesta de error en caso de cualquier otra excepción
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().println("Error al intentar eliminar el empleado");
@@ -63,6 +59,6 @@ public class EliminarEmpleado extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().println("Error: Falta el parámetro 'id' en la solicitud");
         }
+
     }
 }
-

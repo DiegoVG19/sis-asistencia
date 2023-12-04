@@ -48,6 +48,8 @@
                     <li class="nav-item">
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>
+
+
                 </ul>
 
                 <!-- Right navbar links -->
@@ -96,9 +98,9 @@
                                 Cambiar Contraseña
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="cerrarSesion()">
+                            <a id="cerrarSesion" class="dropdown-item" href="javascript:void(0);" onclick="cerrarSesion()">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
+                                Cerrar Sesion
                             </a>
                         </div>
                     </li>
@@ -269,7 +271,7 @@
         <script src="js/logout.js"></script>
         <script src="https://kit.fontawesome.com/c637d789ff.js" crossorigin="anonymous"></script>
         <script>
-                                // Función para obtener el valor de una cookie por su nombre
+
                                 function getCookie(cname) {
                                     let name = cname + "=";
                                     let decodedCookie = decodeURIComponent(document.cookie);
@@ -285,112 +287,145 @@
                                     }
                                     return "";
                                 }
-
-                                // Comprobar si el usuario ha iniciado sesión
-                                let token = getCookie("token");
-                                if (token === "") {
-                                    // Si no hay token, redirigir a la página de inicio de sesión
-                                    window.location.href = "login.html";
-                                } else {
-                                    // El usuario tiene un token, realizar otras operaciones aquí si es necesario
-                                    $(document).ready(function () {
-                                        let usuario = getCookie("usuario");
-                                        $.getJSON("obtenerUsuario", {usuario: usuario}, function (data) {
-                                            if (data.error) {
-                                                console.error("Error: " + data.error);
-                                            } else {
-                                                $("#nombreUsuario").text(data.nombreCompleto);
-                                            }
-                                        });
-
-                                        // Obtener y listar datos en la tabla
-                                        function obtenerYListarDatos() {
-                                            $.ajax({
-                                                url: 'obtenerAsistencias',
-                                                type: 'GET',
-                                                dataType: 'json',
-                                                success: function (data) {
-                                                    // Limpiar la tabla antes de agregar nuevos datos
-                                                    $('#example tbody').empty();
-
-                                                    // Recorrer los resultados y agregar cada fila a la tabla
-                                                    for (var i = 0; i < data.length; i++) {
-                                                        var rowData = data[i];
-
-                                                        // Acceder al valor de CARGO si está presente, de lo contrario, asignar un valor predeterminado
-                                                        var cargoNombre = rowData[8] ? rowData[8] : '';
-
-                                                        // Formatear la fecha de ENTRADA y SALIDA si son objetos Date
-                                                        var entrada = rowData[1] ? new Date(rowData[1].date.year, rowData[1].date.month - 1, rowData[1].date.day, rowData[1].time.hour, rowData[1].time.minute, rowData[1].time.second).toLocaleString() : '';
-                                                        var salida = rowData[2] ? new Date(rowData[2].date.year, rowData[2].date.month - 1, rowData[2].date.day, rowData[2].time.hour, rowData[2].time.minute, rowData[2].time.second).toLocaleString() : '';
-
-                                                        // Agregar el ícono de eliminación con confirmación
-                                                        var deleteIcon = '<a href="#" class="btn btn-danger delete-icon" data-id="' + rowData[0] + '"><i class="fa-solid fa-trash"></i></a>';
-
-                                                        var rowHtml = '<tr>' +
-                                                                '<td>' + rowData[0] + '</td>' +
-                                                                '<td>' + rowData[4] + ' ' + rowData[5] + '</td>' +
-                                                                '<td>' + rowData[6] + '</td>' +
-                                                                '<td>' + cargoNombre + '</td>' +
-                                                                '<td>' + entrada + '</td>' +
-                                                                '<td>' + salida + '</td>' +
-                                                                '<td>' + deleteIcon + '</td>' +
-                                                                '</tr>';
-                                                        $('#example tbody').append(rowHtml);
-                                                    }
-
-                                                    // Agregar evento clic al icono de eliminación
-                                                    $('.delete-icon').on('click', function (e) {
-                                                        e.preventDefault();
-                                                        var id = $(this).data('id');
-                                                        var confirmDelete = confirm('¿Realmente desea eliminar este registro?');
-                                                        if (confirmDelete) {
-                                                            // Enviar el ID al servlet de eliminación
-                                                            $.ajax({
-                                                                url: 'eliminarAsistencia?id=' + id,
-                                                                type: 'GET',
-                                                                success: function (response) {
-                                                                    console.log(response);
-                                                                    // Actualizar la tabla después de la eliminación
-                                                                    location.reload();
-                                                                },
-                                                                error: function (error) {
-                                                                    console.error(error);
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                },
-                                                error: function (error) {
-                                                    console.error(error);
+                                $(document).ready(function () {
+                                    // Validar la sesión al cargar la página
+                                    $.getJSON("validarsesion", function (data) {
+                                        if (data.resultado === "ok") {
+                                            // El usuario tiene una sesión válida, realizar otras operaciones aquí si es necesario
+                                            let usuario = getCookie("usuario");
+                                            $.getJSON("obtenerUsuario", {usuario: usuario}, function (data) {
+                                                if (data.error) {
+                                                    console.error("Error: " + data.error);
+                                                } else {
+                                                    $("#nombreUsuario").text(data.nombreCompleto);
                                                 }
                                             });
-                                        }
 
-                                        // Llamar a la función para obtener y listar datos al cargar la página
-                                        obtenerYListarDatos();
+                                            // Obtener y listar datos en la tabla
+                                            function obtenerYListarDatos() {
+                                                $.ajax({
+                                                    url: 'obtenerAsistencias',
+                                                    type: 'GET',
+                                                    dataType: 'json',
+                                                    success: function (data) {
+                                                        // Limpiar la tabla antes de agregar nuevos datos
+                                                        $('#example tbody').empty();
+
+                                                        // Recorrer los resultados y agregar cada fila a la tabla
+                                                        for (var i = 0; i < data.length; i++) {
+                                                            var rowData = data[i];
+
+                                                            // Acceder al valor de CARGO si está presente, de lo contrario, asignar un valor predeterminado
+                                                            var cargoNombre = rowData[8] ? rowData[8] : '';
+
+                                                            // Formatear la fecha de ENTRADA y SALIDA si son objetos Date
+                                                            var entrada = rowData[1] ? new Date(rowData[1].date.year, rowData[1].date.month - 1, rowData[1].date.day, rowData[1].time.hour, rowData[1].time.minute, rowData[1].time.second).toLocaleString() : '';
+                                                            var salida = rowData[2] ? new Date(rowData[2].date.year, rowData[2].date.month - 1, rowData[2].date.day, rowData[2].time.hour, rowData[2].time.minute, rowData[2].time.second).toLocaleString() : '';
+
+                                                            // Agregar el ícono de eliminación con confirmación
+                                                            var deleteIcon = '<a href="#" class="btn btn-danger delete-icon" data-id="' + rowData[0] + '"><i class="fa-solid fa-trash"></i></a>';
+
+                                                            var rowHtml = '<tr>' +
+                                                                    '<td>' + rowData[0] + '</td>' +
+                                                                    '<td>' + rowData[4] + ' ' + rowData[5] + '</td>' +
+                                                                    '<td>' + rowData[6] + '</td>' +
+                                                                    '<td>' + cargoNombre + '</td>' +
+                                                                    '<td>' + entrada + '</td>' +
+                                                                    '<td>' + salida + '</td>' +
+                                                                    '<td>' + deleteIcon + '</td>' +
+                                                                    '</tr>';
+                                                            $('#example tbody').append(rowHtml);
+                                                        }
+
+                                                        // Agregar evento clic al icono de eliminación
+                                                        $('.delete-icon').on('click', function (e) {
+                                                            e.preventDefault();
+                                                            var id = $(this).data('id');
+                                                            var confirmDelete = confirm('¿Realmente desea eliminar este registro?');
+                                                            if (confirmDelete) {
+                                                                // Enviar el ID al servlet de eliminación
+                                                                $.ajax({
+                                                                    url: 'eliminarAsistencia?id=' + id,
+                                                                    type: 'GET',
+                                                                    success: function (response) {
+                                                                        console.log(response);
+                                                                        // Actualizar la tabla después de la eliminación
+                                                                        location.reload();
+                                                                    },
+                                                                    error: function (error) {
+                                                                        console.error(error);
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    },
+                                                    error: function (error) {
+                                                        console.error(error);
+                                                    }
+                                                });
+                                            }
+
+                                            // Llamar a la función para obtener y listar datos al cargar la página
+                                            obtenerYListarDatos();
+
+                                            // Configurar el botón para generar el PDF
+                                            $("#btnGenerarPDF").click(function () {
+                                                // Realizar una solicitud AJAX al servlet
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "generarPdf", // Ajusta la URL según tu configuración
+                                                    success: function (response) {
+                                                        // Abrir el PDF en una nueva ventana o pestaña
+                                                        window.open("generarPdf");
+                                                    },
+                                                    error: function (error) {
+                                                        console.error("Error al generar el PDF", error);
+                                                        // Manejar el error según tus necesidades
+                                                    }
+                                                });
+                                            });
+                                        } else {
+                                            // No hay una sesión válida, redirigir a la página de inicio de sesión
+                                            $(location).attr('href', "login.html");
+                                        }
+                                    });
+                                });
+
+                                function cerrarSesion() {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "cerrarsesion",
+                                        success: function (data) {
+                                            try {
+                                                console.log("Respuesta del servidor al cerrar sesión:", data);
+
+                                                if (data.resultado === "ok") {
+                                                    console.log("Sesión cerrada correctamente");
+                                                    // Redirige a la página de inicio de sesión después de cerrar la sesión
+                                                    document.cookie = "usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                    document.cookie = "pass=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                    document.cookie = "dato=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                    window.location.href = "login.html";
+                                                } else {
+                                                    console.error("Error al cerrar sesión:", data.mensaje);
+                                                    document.cookie = "usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                    document.cookie = "pass=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                    document.cookie = "dato=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                    location.reload(true);
+                                                }
+                                            } catch (error) {
+                                                console.error("Error al procesar la respuesta del servidor:", error);
+                                            }
+                                        },
+                                        error: function (error) {
+                                            console.error("Error en la solicitud al cerrar sesión:", error);
+                                            // Muestra un mensaje de error en tu interfaz de usuario o realiza otras acciones según sea necesario
+                                        }
                                     });
                                 }
-        </script>
 
-        <script>
-            $(document).ready(function () {
-                $("#btnGenerarPDF").click(function () {
-                    // Realizar una solicitud AJAX al servlet
-                    $.ajax({
-                        type: "GET",
-                        url: "generarPdf", // Ajusta la URL según tu configuración
-                        success: function (response) {
-                            // Abrir el PDF en una nueva ventana o pestaña
-                            window.open("generarPdf" );
-                        },
-                        error: function (error) {
-                            console.error("Error al generar el PDF", error);
-                            // Manejar el error según tus necesidades
-                        }
-                    });
-                });
-            });
         </script>
 
     </body>

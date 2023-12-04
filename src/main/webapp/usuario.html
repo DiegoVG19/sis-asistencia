@@ -31,6 +31,7 @@
         <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
         <!-- summernote -->
         <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 
 
@@ -105,7 +106,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="cerrarSesion()">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
+                                Cerrar Sesion
                             </a>
                         </div>
                     </li>
@@ -160,6 +161,11 @@
                             <li class="nav-item">
                                 <a href="cargo.html" class="nav-link">
                                     <p>CARGOS</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="chat.html" class="nav-link">
+                                    <p>CHAT</p>
                                 </a>
                             </li>
                         </ul>
@@ -223,13 +229,10 @@
         <!-- /.content-wrapper -->
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary edit-icon" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Launch static backdrop modal
-        </button>
+        
 
         <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">EDITAR USUARIO</h1>
@@ -238,6 +241,9 @@
                     <div class="modal-body">
                         <!-- Contenido del modal -->
                         <form id="editarUsuarioForm" action="" method="POST">
+                            <div class="fl-flex-label mb-4 px-2 col-12" style="display:none;">
+                                <input type="text" placeholder="Caja Oculta" class="input input__text" name="txtoculta" id="txtoculta">
+                            </div>
                             <div class="fl-flex-label mb-4 px-2 col-12">
                                 <input type="text" placeholder="Nombre" class="input input__text" name="txtnombre" id="txtnombre">
                             </div>
@@ -253,7 +259,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarModal" data-bs-dismiss="modal">CERRAR</button>
                         <button type="button" class="btn btn-primary" onclick="guardarUsuario()">GUARDAR</button>
                     </div>
                 </div>
@@ -302,8 +308,9 @@
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <
+
         <script src="js/logout.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="https://kit.fontawesome.com/c637d789ff.js" crossorigin="anonymous"></script>
         <script>
                             // Función para obtener el valor de una cookie por su nombre
@@ -389,13 +396,27 @@
                                                     e.preventDefault();
                                                     var id = $(this).data('id');
 
-                                                    // Abre el modal y establece el 'id' en el botón de guardar
-                                                    $('#staticBackdrop').modal('show');
-                                                    $('#guardarBoton').data('id', id);
+                                                    // Establecer el valor en la caja de texto oculta
+                                                    $('#txtoculta').val(id);
+                                                    $('#btnCerrarModal').on('click', function () {
+                                                        // Limpiar los valores de las cajas de texto al cerrar la ventana modal
+                                                        $('#txtoculta').val('');
+                                                        $('#txtnombre').val('');
+                                                        $('#txtapellido').val('');
+                                                        $('#txtusuario').val('');
+                                                        $('#txtclave').val('');
 
+                                                        // Cerrar la ventana modal
+                                                        $('#staticBackdrop').modal('hide');
+                                                    });
+
+
+                                                    // Abre el modal
+                                                    $('#staticBackdrop').modal('show').draggable({
+                                                        handle: ".modal-header"
+                                                    });
                                                     console.log("Botón de editar clicado. ID: " + id);
                                                 });
-                                                $(document).on('click', '#guardarBoton', guardarUsuario);
                                             },
                                             error: function (error) {
                                                 console.error(error);
@@ -405,19 +426,14 @@
 
                                     // Llamar a la función para obtener y listar datos al cargar la página
                                     obtenerYListarUsuarios();
-
-                                    // Función para abrir la ventana modal
-                                    function abrirVentanaModal() {
-                                        $('#exampleModal').modal('show');
-                                    }
                                 });
                             }
         </script>
-        <script>
 
+        <script>
             function guardarUsuario() {
                 // Recuperar los valores de las cajas de texto
-                var id = $('#guardarBoton').data('id');
+                var id = $('#txtoculta').val();
                 var nombre = $('#txtnombre').val();
                 var apellido = $('#txtapellido').val();
                 var usuario = $('#txtusuario').val();
@@ -427,10 +443,10 @@
 
                 // Enviar los datos al servlet usando AJAX
                 $.ajax({
-                    url: 'modificarUsua',
+                    url: 'modificarUsuario',
                     type: 'POST',
                     data: {
-                        id: id,
+                        txtoculta: id,
                         txtnombre: nombre,
                         txtapellido: apellido,
                         txtusuario: usuario,
@@ -457,7 +473,7 @@
                 // Cerrar el modal
                 $('#staticBackdrop').modal('hide');
             }
-
         </script>
+
     </body>
 </html>

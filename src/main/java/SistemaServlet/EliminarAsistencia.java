@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package servlet;
+package SistemaServlet;
 
-import dao.CargoJpaController;
+import dao.AsistenciaJpaController;
+import dao.exceptions.NonexistentEntityException;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,15 +17,15 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author redcr
  */
-@WebServlet(name = "EliminarCargo", urlPatterns = {"/eliminarCargo"})
-public class EliminarCargo extends HttpServlet {
+@WebServlet("/eliminarAsistencia")
+public class EliminarAsistencia extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private final CargoJpaController empleadoController;
+    private final AsistenciaJpaController asistenciaController;
 
-    public EliminarCargo() {
-        // Utilizamos la misma EntityManagerFactory que ya tienes configurada en CargoJpaController
-        empleadoController = new CargoJpaController();
+    public EliminarAsistencia() {
+        // Utilizamos la misma EntityManagerFactory que ya tienes configurada en AsistenciaJpaController
+        asistenciaController = new AsistenciaJpaController();
     }
 
     @Override
@@ -38,8 +39,8 @@ public class EliminarCargo extends HttpServlet {
                 // Convertir el ID a entero
                 int id = Integer.parseInt(idAsString);
 
-                // Llamar al método de la controladora para eliminar el empleado por ID
-                empleadoController.eliminar(id);
+                // Llamar al método de la controladora para eliminar la asistencia por ID
+                asistenciaController.destroy(id);
 
                 // Enviar una respuesta exitosa
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -48,17 +49,19 @@ public class EliminarCargo extends HttpServlet {
                 // Enviar una respuesta de error si el ID no es un número válido
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.getWriter().println("Error: El ID no es un número válido");
-            } // Enviar una respuesta de error si no se encuentra el empleado por el ID
-            catch (Exception e) {
+            } catch (NonexistentEntityException e) {
+                // Enviar una respuesta de error si no se encuentra la asistencia por el ID
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().println("Error: No se encontró la asistencia con el ID especificado");
+            } catch (Exception e) {
                 // Enviar una respuesta de error en caso de cualquier otra excepción
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().println("Error al intentar eliminar el empleado");
+                response.getWriter().println("Error al intentar eliminar la asistencia");
             }
         } else {
             // Enviar una respuesta de error si no se proporciona un ID
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().println("Error: Falta el parámetro 'id' en la solicitud");
         }
-
     }
 }

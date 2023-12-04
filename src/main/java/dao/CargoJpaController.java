@@ -127,6 +127,15 @@ public class CargoJpaController implements Serializable {
         }
     }
 
+     public Cargo obtenerCargoPorId(Integer id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Cargo.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {

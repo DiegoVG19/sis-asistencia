@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package servlet;
+package UsuarioServlet;
 
 import dao.UsuarioJpaController;
 import dao.exceptions.NonexistentEntityException;
@@ -20,7 +20,7 @@ import security.SHA256;
  *
  * @author redcr
  */
-@WebServlet(name = "ModificarUsua", urlPatterns = {"/modificarUsua"})
+@WebServlet(name = "ModificarUsuario", urlPatterns = {"/modificarUsuario"})
 public class ModificarUsuario extends HttpServlet {
 
      private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ public class ModificarUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Obtener los datos del formulario
-        String idAsString = "1";
+        String idAsString = request.getParameter("txtoculta");
         String nombre = request.getParameter("txtnombre");
         String apellido = request.getParameter("txtapellido");
         String usuario = request.getParameter("txtusuario");
